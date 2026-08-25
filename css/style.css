@@ -10,8 +10,7 @@
    Pretendard 는 온라인이면 CDN, 아니면 시스템 고딕으로 대체됩니다.            */
 @font-face {
   font-family: 'Ownglyph PDH';
-  src: url('../assets/font/OwnglyphPDH.woff2') format('woff2'),
-       url('../assets/font/OwnglyphPDH.ttf')   format('truetype');
+  src: url('../assets/font/OwnglyphPDH.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
