@@ -238,6 +238,23 @@ SCREEN_INDEX.forEach(function (s) {
 document.getElementById('btn-back').addEventListener('click', back);
 document.getElementById('btn-reset').addEventListener('click', function () { start(); });
 
+/* ---------- 창 크기에 맞춰 폰 프레임 축소 ---------- */
+function fitPhone() {
+  var sidebar = document.querySelector('.sidebar');
+  var sw = (sidebar && getComputedStyle(sidebar).display !== 'none') ? sidebar.offsetWidth : 0;
+  var caption = document.querySelector('.stage-caption');
+  var capH = caption ? caption.offsetHeight : 28;
+
+  var availH = window.innerHeight - capH - 56;   /* 캡션 + 위아래 여백 */
+  var availW = window.innerWidth - sw - 56;
+
+  var s = Math.min(1, availH / 812, availW / 375);
+  document.documentElement.style.setProperty('--pscale', Math.max(0.35, s).toFixed(4));
+}
+
+window.addEventListener('resize', fitPhone);
+fitPhone();
+
 /* ---------- 시작 ---------- */
 function start() {
   state = initialState();
