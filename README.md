@@ -78,34 +78,33 @@ _legacy/              이전 와이어프레임 프로토타입 (다른 디자�
 
 ---
 
-## ⚠️ 필요한 리소스 — 폰트 1개
+## 폰트
 
-이미지·아이콘 **41개는 Figma에서 전부 자동으로 받아 `assets/`에 넣어뒀습니다.**
-따로 넣어주실 건 **폰트 파일 하나**뿐입니다.
+이미지·아이콘·폰트 **전부 포함돼 있습니다.** 따로 넣으실 것 없습니다.
 
-### Ownglyph PDH (온글잎 박다현체)
+| 용도 | 폰트 | 위치 |
+|---|---|---|
+| 제목·라벨·캐릭터 대사 | **Ownglyph PDH** (온글잎 박다현체) | `assets/font/OwnglyphPDH.woff2` (동봉) |
+| 말풍선 본문·시간·팝업 | Pretendard | jsDelivr CDN (`css/style.css` 1번 줄) |
+| 상태바 시각 | Inter | 시스템 대체 |
 
-디자인 전체의 제목·라벨·캐릭터 대사에 쓰이는 손글씨 폰트입니다.
-지금은 파일이 없어서 **Pretendard로 대체 표시**되고 있어요. (레이아웃은 정상)
+### 폰트를 바꾸려면
 
-**넣을 위치와 파일명 (둘 중 아무거나, 둘 다 넣어도 됨):**
+`css/style.css` 위쪽 두 군데만 고치면 전체에 반영됩니다.
 
+```css
+/* 1. 폰트 파일 교체 — -face 의 src 경로 */
+@font-face { font-family: 'Ownglyph PDH'; src: url('../assets/font/OwnglyphPDH.woff2') format('woff2'); }
+
+/* 2. 어떤 폰트를 쓸지 — :root 의 변수 */
+--font-hand: 'Ownglyph PDH', 'Pretendard', sans-serif;   /* 손글씨체 */
+--font-body: 'Pretendard', sans-serif;                     /* 본문 */
 ```
-assets/font/OwnglyphPDH.woff2      ← 권장 (용량 작고 빠름)
-assets/font/OwnglyphPDH.ttf
-```
 
-파일만 저 이름으로 넣으면 코드 수정 없이 바로 적용됩니다.
-(`css/style.css` 맨 위 `@font-face`가 이 경로를 보고 있습니다.)
+글자 크기는 각 컴포넌트 규칙(`.appbar .title`, `.cal-day` 등)에 `font-size` 로 들어 있습니다.
 
-> 파일명을 바꾸고 싶으면 `css/style.css`의 `@font-face { src: ... }` 경로만 고치면 됩니다.
-
-### 참고: Pretendard
-
-말풍선 본문·시간·팝업 텍스트에 쓰입니다.
-지금은 CDN(jsDelivr)에서 자동으로 불러오고 있어서 **인터넷이 되면 그냥 잘 나옵니다.**
-오프라인에서도 쓰고 싶으면 `assets/font/`에 Pretendard를 넣고
-`css/style.css` 1번 줄의 `@import`를 로컬 `@font-face`로 바꿔주세요.
+> 온글잎 박다현체는 상업용 무료 폰트(제작 VoyagerX)입니다. 저장소가 Public이라
+> 폰트 파일 재배포 조건은 한 번 확인해두시면 좋습니다.
 
 ---
 
