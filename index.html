@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Hamnal · 주화면 프로토타입</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <h1>Hamnal</h1>
+      <p>Design · 주화면 1–10</p>
+    </div>
+    <nav id="screen-index"></nav>
+    <div class="sidebar-foot">
+      <button class="ghost-btn" id="btn-reset">처음부터</button>
+      <p class="hint">화면 안의 버튼을 눌러 실제 흐름대로 따라갈 수 있어요.</p>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="phone">
+      <div class="viewport" id="viewport"></div>
+    </div>
+    <div class="stage-caption">
+      <button class="ghost-btn small" id="btn-back">← 뒤로</button>
+      <span id="screen-label">—</span>
+    </div>
+  </main>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/screens.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
