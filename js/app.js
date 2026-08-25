@@ -50,7 +50,7 @@ function render(id, opts) {
   viewport.innerHTML = SCREENS[id](state);
 
   var meta = SCREEN_INDEX.filter(function (s) { return s.id === id; })[0];
-  label.textContent = meta ? '주화면 ' + meta.num + ' · ' + meta.label : id;
+  label.textContent = meta ? meta.cat + ' : ' + meta.label : id;
 
   Array.prototype.forEach.call(indexNav.children, function (b) {
     b.classList.toggle('on', b.dataset.go === id);
@@ -230,7 +230,7 @@ function jump(id) {
 SCREEN_INDEX.forEach(function (s) {
   var b = document.createElement('button');
   b.dataset.go = s.id;
-  b.innerHTML = '<span class="num">' + s.num + '</span> ' + s.label;
+  b.innerHTML = '<span class="cat">' + s.cat + '</span><span class="sep">:</span>' + s.label;
   b.addEventListener('click', function () { jump(s.id); });
   indexNav.appendChild(b);
 });

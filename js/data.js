@@ -172,19 +172,19 @@ var FORTUNE = {
   ]
 };
 
-/* 화면 인덱스 */
+/* 화면 인덱스 — 카테고리 : 화면이름 */
 var SCREEN_INDEX = [
-  { id: 'home',            num: '1',    label: 'home' },
-  { id: 'chat-empty',      num: '2',    label: '대화없을때' },
-  { id: 'chat-new',        num: '3',    label: '대화 처음 시작시' },
-  { id: 'chat-start',      num: '4',    label: '대화' },
-  { id: 'chat',            num: '5',    label: '대화' },
-  { id: 'chat-list',       num: '6',    label: '대화 목록' },
-  { id: 'chat-list-pin',   num: '7',    label: '고정' },
-  { id: 'chat-menu',       num: '8',    label: '햄버거 누르고 나서' },
-  { id: 'chat-rename',     num: '9',    label: '대화방명 바꾸기' },
-  { id: 'chat-delete',     num: '10',   label: '채팅방 삭제' },
-  { id: 'attend',          num: '출첵', label: '출석체크' },
-  { id: 'attend-done',     num: '출첵', label: '해바라기씨 받은 후' },
-  { id: 'fortune',         num: '운세', label: '오늘의 운세' }
+  { id: 'home',          cat: '주화면', label: '1 home' },
+  { id: 'chat-empty',    cat: '주화면', label: '2 대화없을때' },
+  { id: 'chat-new',      cat: '주화면', label: '3 대화 처음 시작시' },
+  { id: 'chat-start',    cat: '주화면', label: '4 대화' },
+  { id: 'chat',          cat: '주화면', label: '5 대화' },
+  { id: 'chat-list',     cat: '주화면', label: '6 대화 목록' },
+  { id: 'chat-list-pin', cat: '주화면', label: '7 고정' },
+  { id: 'chat-menu',     cat: '주화면', label: '8 햄버거 누르고 나서' },
+  { id: 'chat-rename',   cat: '주화면', label: '9 대화방명 바꾸기' },
+  { id: 'chat-delete',   cat: '주화면', label: '10 채팅방 삭제' },
+  { id: 'attend',        cat: '출첵',   label: '출석체크' },
+  { id: 'attend-done',   cat: '출첵',   label: '해바라기씨 받은 후' },
+  { id: 'fortune',       cat: '운세',   label: '오늘의 운세' }
 ];

@@ -63,7 +63,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   width: 232px; flex: none; display: flex; flex-direction: column;
   background: #FFFFFF; border-right: 1px solid #E2DED4;
 }
-.sidebar-head { padding: 22px 20px 14px; border-bottom: 1px solid #EFECE4; }
+.sidebar-head { padding: 20px 20px 16px; border-bottom: 1px solid #EFECE4; }
 .sidebar-head h1 { font-family: var(--font-hand); font-size: 26px; font-weight: 400; letter-spacing: -.2px; }
 .sidebar-head p  { margin-top: 3px; font-size: 12px; color: var(--text-disabled); }
 
@@ -75,7 +75,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 #screen-index button:hover { background: #F6F3EA; }
 #screen-index button.on { background: var(--accent-primary); color: #fff; font-weight: 600; }
-#screen-index .num { display: inline-block; min-width: 22px; opacity: .75; font-variant-numeric: tabular-nums; }
+/* 카테고리 : 화면이름 — 콜론이 세로로 맞도록 카테고리 폭 고정 */
+#screen-index .cat { display: inline-block; min-width: 44px; opacity: .7; }
+#screen-index .sep { display: inline-block; width: 14px; text-align: center; opacity: .45; }
 
 .sidebar-foot { padding: 14px 16px 18px; border-top: 1px solid #EFECE4; }
 .sidebar-foot .hint { margin-top: 10px; font-size: 11px; line-height: 1.5; color: var(--text-disabled); }
