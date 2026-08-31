@@ -968,3 +968,35 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* 건강운은 라벨이 작고 본문이 큼 */
 .ch-gcard.is-flip .ch-gt { font-size: 14px; color: var(--text-secondary); }
 .ch-gcard.is-flip .ch-gd { font-size: 15px; line-height: 22px; color: var(--text-primary); }
+
+/* 통계 카드 */
+.ch-stats { flex-direction: row; gap: 8px; padding: 12px 16px 32px; }
+.ch-stat {
+  flex: 1 0 0; min-width: 0; height: 82px; padding: 14px; border-radius: 12px;
+  background: var(--bg-white); border: .5px solid var(--border-divide, #F0F0F0);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ch-stat .n { font-family: var(--font-body); font-weight: 700; font-size: 21px; line-height: 1.5; color: var(--text-primary); }
+.ch-stat .l { font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); letter-spacing: -.72px; }
+
+/* 가로 막대 */
+.ch-bars { gap: 8px; padding: 12px 16px 32px; }
+.ch-bars .ch-label { margin-bottom: 6px; }
+.ch-bar { display: flex; align-items: center; gap: 10px; }
+.ch-bar .l { width: 64px; flex: none; font-family: var(--font-body); font-weight: 500; font-size: 14px; line-height: 22px; color: var(--text-primary); }
+.ch-bar.is-first .l { font-weight: 600; }
+.ch-bar .track { flex: 1 0 0; min-width: 0; height: 9px; background: #F8F8F8; border-radius: 5px; overflow: hidden; }
+.ch-bar .fill { display: block; height: 9px; border-radius: 5px; background: var(--text-disabled); }
+.ch-bar.is-first .fill { background: #FFC320; }
+.ch-bar .p { width: 34px; flex: none; font-family: var(--font-body); font-weight: 700; font-size: 15px; color: var(--text-disabled); }
+.ch-bar.is-first .p { color: var(--text-primary); }
+
+/* 주차별 날씨 */
+.ch-weather { flex-direction: row; flex-wrap: wrap; gap: 8px; padding: 12px 16px 32px; }
+.ch-wcard {
+  flex: 1 1 calc(50% - 4px); min-width: 0; height: 105px; position: relative;
+  background: var(--bg-default); border-radius: 12px; overflow: hidden;
+}
+.ch-wcard .w { position: absolute; left: 16px; top: 16px; font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); letter-spacing: -.72px; }
+.ch-wcard .t { position: absolute; left: 16px; top: 34px; font-family: var(--font-body); font-weight: 700; font-size: 21px; line-height: 1.5; color: var(--text-primary); white-space: nowrap; }
+.ch-wcard img { position: absolute; right: 10px; bottom: 8px; width: 48px; height: 48px; }

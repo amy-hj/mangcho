@@ -886,6 +886,32 @@ function chapterBlocks(id) {
         '<div class="ch-text">' + paras + '</div>' +
       '</section>';
     }
+    if (b.type === 'stats') {
+      return '<section class="ch-sec ch-stats">' + b.items.map(function (s) {
+        return '<div class="ch-stat"><p class="n">' + esc(s.n) + '</p><p class="l">' + esc(s.l) + '</p></div>';
+      }).join('') + '</section>';
+    }
+    if (b.type === 'bars') {
+      return '<section class="ch-sec ch-bars">' +
+        '<p class="ch-label">' + esc(b.label) + '</p>' +
+        b.items.map(function (r) {
+          return '<div class="ch-bar' + (r.first ? ' is-first' : '') + '">' +
+            '<span class="l">' + esc(r.l) + '</span>' +
+            '<span class="track"><span class="fill" style="width:' + r.pct + '%"></span></span>' +
+            '<span class="p">' + r.pct + '%</span>' +
+          '</div>';
+        }).join('') +
+      '</section>';
+    }
+    if (b.type === 'weather') {
+      return '<section class="ch-sec ch-weather">' + b.items.map(function (w) {
+        return '<div class="ch-wcard">' +
+          '<span class="w">' + esc(w.w) + '</span>' +
+          '<span class="t">' + esc(w.t) + '</span>' +
+          '<img src="' + w.icon + '" alt="">' +
+        '</div>';
+      }).join('') + '</section>';
+    }
     if (b.type === 'gauge') {
       var gcards = b.cards.map(function (c) {
         return '<div class="ch-gcard' + (b.flip ? ' is-flip' : '') + '">' +
