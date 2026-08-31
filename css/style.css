@@ -906,3 +906,50 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-family: var(--font-hand); font-size: 18px; color: var(--text-primary);
 }
 .letter-foot .foot-char { width: 96px; height: 114px; }
+
+/* ---------- 1부/2부 아코디언 본문 ---------- */
+.toc-part-block { margin-top: 20px; border-radius: 12px; overflow: hidden; background: var(--bg-white); }
+.toc-part-block .toc-part { margin: 0; border-radius: 0; background: #FFE685; }
+.toc-block { border-bottom: 1px solid var(--border-divide, #F0F0F0); }
+.toc-block:last-child { border-bottom: 0; }
+.toc-block .toc-row { padding: 16px; border-bottom: 0; }
+.toc-block.is-open .toc-row { background: #FCFCFC; }
+
+.toc-panel { padding: 0 0 8px; }
+.ch-empty { padding: 20px 16px; font-family: var(--font-body); font-size: 14px; color: var(--text-disabled); }
+
+.ch-sec { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.ch-label {
+  font-family: var(--font-body); font-weight: 600; font-size: 14px; color: var(--text-disabled);
+}
+.ch-label--dark { color: var(--text-secondary); }
+
+.ch-graph { align-items: center; }
+.ch-graph .ch-label { align-self: flex-start; }
+.ch-graph-img { width: 270px; height: 161px; }
+
+.ch-periods { gap: 0; padding: 0 16px 16px; }
+.ch-period {
+  background: #F8F8F8; padding: 16px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
+}
+.ch-period:first-child { border-radius: 12px 12px 0 0; }
+.ch-period:last-child  { border-radius: 0 0 12px 12px; }
+.ch-badge {
+  background: #FFE685; color: #402508; border-radius: 4px; padding: 3px 8px;
+  font-family: var(--font-body); font-weight: 700; font-size: 12px; line-height: 1.5;
+}
+.ch-term { font-family: var(--font-body); font-size: 14px; }
+.ch-term b    { font-weight: 600; color: var(--text-secondary); }
+.ch-term span { font-weight: 400; color: var(--text-disabled); }
+.ch-term-tx {
+  font-family: var(--font-body); font-weight: 500; font-size: 15px; line-height: 22px; color: var(--text-primary);
+}
+
+.ch-text { display: flex; flex-direction: column; gap: 22px; }
+.ch-text p {
+  font-family: var(--font-body); font-size: 15px; line-height: 22px; color: var(--text-primary);
+}
+.ch-quote {
+  background: #F8F8F8; border-radius: 12px; padding: 12px 16px;
+  font-family: var(--font-body); font-weight: 500; font-size: 15px; line-height: 1.5; color: var(--text-primary);
+}

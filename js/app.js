@@ -56,7 +56,10 @@ function initialState() {
     seeds:           ME.seeds,
     form:            Object.assign({}, PROFILE_FORM),
     withdrawChecked: false,
-    payIndex:        0
+    payIndex:        0,
+
+    /* 편지 목차 아코디언 */
+    openChapter: null
   };
   return s;
 }
@@ -255,6 +258,16 @@ viewport.addEventListener('click', function (e) {
     return;
   }
 
+  el = e.target.closest('[data-chapter]');
+  if (el) {
+    var ch = el.dataset.chapter;
+    state.openChapter = (state.openChapter === ch) ? null : ch;
+    render(state.current, { replace: true });
+    var open = viewport.querySelector('.toc-block.is-open');
+    if (open) open.scrollIntoView({ block: 'nearest' });
+    return;
+  }
+
   el = e.target.closest('[data-buy]');
   if (el) { state.payIndex = Number(el.dataset.buy); go('my-charge-pay'); return; }
 
@@ -362,6 +375,7 @@ function jump(id) {
     state.roomName = ONGOING_ROOM_NAME;
     state.draft = (id === 'chat') ? ONGOING_DRAFT : '';
   }
+  if (id === 'letter-opened') state.openChapter = null;
   if (id.indexOf('my') === 0) {
     state.form = Object.assign({}, PROFILE_FORM);
     if (id === 'my-withdraw' || id === 'my-bye') state.withdrawChecked = (id === 'my-bye');

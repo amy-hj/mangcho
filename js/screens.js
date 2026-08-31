@@ -854,6 +854,71 @@ function scLetterPreview() {
     '</div>';
 }
 
+
+/* ---------- 장 본문 블록 렌더 ---------- */
+function chapterBlocks(id) {
+  var blocks = CHAPTER_BODY[id];
+  if (!blocks) return '<div class="ch-empty">본문은 준비 중이에요.</div>';
+
+  return blocks.map(function (b) {
+    if (b.type === 'graph') {
+      return '<section class="ch-sec ch-graph">' +
+        '<p class="ch-label ch-label--dark">' + esc(b.label) + '</p>' +
+        '<img class="ch-graph-img" src="' + ASSET.fortuneGraph + '" alt="' + esc(b.label) + '">' +
+      '</section>';
+    }
+    if (b.type === 'period') {
+      var cards = b.items.map(function (it) {
+        return '<div class="ch-period">' +
+          (it.badge ? '<span class="ch-badge">' + esc(it.badge) + '</span>' : '') +
+          '<p class="ch-term"><b>' + esc(it.term) + '</b><span> | ' + esc(it.range) + '</span></p>' +
+          '<p class="ch-term-tx">' + esc(it.text) + '</p>' +
+        '</div>';
+      }).join('');
+      return '<section class="ch-sec ch-periods">' + cards + '</section>';
+    }
+    if (b.type === 'text') {
+      var paras = b.paras.map(function (p) {
+        return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>';
+      }).join('');
+      return '<section class="ch-sec">' +
+        '<p class="ch-label">' + esc(b.label) + '</p>' +
+        '<div class="ch-text">' + paras + '</div>' +
+      '</section>';
+    }
+    if (b.type === 'quote') {
+      return '<section class="ch-sec">' +
+        '<p class="ch-label">' + esc(b.label) + '</p>' +
+        '<div class="ch-quote">' + b.lines.map(esc).join('<br>') + '</div>' +
+      '</section>';
+    }
+    return '';
+  }).join('');
+}
+
+/* ---------- 목차 아코디언 (편지6 · 1부 · 2부 공용) ---------- */
+function tocAccordion(openId) {
+  return LETTER_TOC.parts.map(function (p) {
+    var rows = p.items.map(function (it) {
+      var open = it.id === openId;
+      return '<div class="toc-block' + (open ? ' is-open' : '') + '">' +
+        '<button class="toc-row" data-chapter="' + it.id + '">' +
+          '<span class="toc-t">' +
+            '<span class="toc-h"><em class="emo">' + it.emoji + '</em>' +
+              '<b>' + esc(it.name) + '</b><span class="bar">|</span>' + esc(it.tail) + '</span>' +
+            '<span class="toc-s">' + esc(it.sub) + '</span>' +
+          '</span>' +
+          '<span class="toc-chev">' + (open ? '⌃' : '⌄') + '</span>' +
+        '</button>' +
+        (open ? '<div class="toc-panel">' + chapterBlocks(it.id) + '</div>' : '') +
+      '</div>';
+    }).join('');
+    return '<div class="toc-part-block">' +
+      '<p class="toc-part">' + esc(p.label) + '</p>' +
+      '<div class="toc-rows">' + rows + '</div>' +
+    '</div>';
+  }).join('');
+}
 /* ---------- 편지6 · 결제 후 (목차) ---------- */
 function letterSheetMarkup() {
   return '' +
@@ -871,7 +936,7 @@ function letterSheetMarkup() {
     '</div>';
 }
 
-function scLetterOpened() {
+function scLetterOpened(state) {
   /* 결제 후이므로 가림(blur) 없이 그대로 보여줍니다 */
   var teaser = LETTER_TEASER.items.map(function (it) {
     return '<div class="teaser-item">' +
@@ -886,20 +951,7 @@ function scLetterOpened() {
     return '<button class="toc-tab' + (i === 0 ? ' on' : '') + '">' + esc(t) + '</button>';
   }).join('');
 
-  var parts = LETTER_TOC.parts.map(function (p) {
-    var rows = p.items.map(function (it) {
-      return '<button class="toc-row" data-go="' + it.id + '">' +
-        '<span class="toc-t">' +
-          '<span class="toc-h"><em class="emo">' + it.emoji + '</em>' +
-            '<b>' + esc(it.name) + '</b><span class="bar">|</span>' + esc(it.tail) + '</span>' +
-          '<span class="toc-s">' + esc(it.sub) + '</span>' +
-        '</span>' +
-        '<span class="toc-chev">⌄</span>' +
-      '</button>';
-    }).join('');
-    return '<p class="toc-part">' + esc(p.label) + '</p>' +
-           '<div class="toc-rows">' + rows + '</div>';
-  }).join('');
+  var parts = tocAccordion(state.openChapter);
 
   return '' +
     '<div class="screen screen--paper">' +
