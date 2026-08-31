@@ -280,6 +280,13 @@ viewport.addEventListener('click', function (e) {
     if (sc2 && row2) {
       sc2.scrollTop = beforeScroll;
       sc2.scrollTop = beforeScroll + (row2.getBoundingClientRect().top - beforeTop);
+
+      /* 그래도 그 줄이 화면 밖이면 보이는 자리로 끌어옵니다 */
+      var sb = sc2.getBoundingClientRect();
+      var rb = row2.getBoundingClientRect();
+      if (rb.top < sb.top || rb.bottom > sb.bottom) {
+        sc2.scrollTop += (rb.top - sb.top) - 12;
+      }
     }
     return;
   }
