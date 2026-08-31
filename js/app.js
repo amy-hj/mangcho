@@ -15,7 +15,12 @@ function initialState() {
     msgs:      CHAT_ONGOING.slice(),
     startMsgs: CHAT_START.slice(),
     draft:        '',
-    showSuggests: true
+    showSuggests: true,
+
+    /* 마이페이지 */
+    seeds:           ME.seeds,
+    form:            Object.assign({}, PROFILE_FORM),
+    withdrawChecked: false
   };
 }
 
@@ -156,6 +161,15 @@ viewport.addEventListener('click', function (e) {
     return;
   }
 
+  el = e.target.closest('[data-gender]');
+  if (el) { state.form.gender = el.dataset.gender; render(state.current, { replace: true }); return; }
+
+  if (e.target.closest('#btn-edit-save')) {   /* 06-4 수정하기 */
+    navStack = [];
+    render('my', { replace: true });
+    return;
+  }
+
   if (e.target.closest('#btn-rename')) {
     var ri = viewport.querySelector('#rename-input');
     var v = ri ? ri.value.trim() : '';
@@ -186,6 +200,17 @@ viewport.addEventListener('keydown', function (e) {
   if (e.target.id === 'rename-input') {
     var btn = viewport.querySelector('#btn-rename');
     if (btn) btn.click();
+  }
+});
+
+viewport.addEventListener('change', function (e) {
+  if (e.target.id === 'chk-withdraw') {
+    state.withdrawChecked = e.target.checked;
+    render(state.current, { replace: true });
+  }
+  if (e.target.id === 'chk-unknown-time') {
+    state.form.unknownTime = e.target.checked;
+    render(state.current, { replace: true });
   }
 });
 
@@ -222,6 +247,10 @@ function jump(id) {
     state.msgs = CHAT_ONGOING.slice();
     state.roomName = ONGOING_ROOM_NAME;
     state.draft = (id === 'chat') ? ONGOING_DRAFT : '';
+  }
+  if (id.indexOf('my') === 0) {
+    state.form = Object.assign({}, PROFILE_FORM);
+    state.withdrawChecked = (id === 'my-withdraw') ? false : state.withdrawChecked;
   }
   navStack = [];
   render(id, { replace: true });

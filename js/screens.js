@@ -25,6 +25,7 @@ function statusBar() {
 function bottomNav(active) {
   var homeOn = active === 'home';
   var chatOn = active === 'chat';
+  var myOn   = active === 'my';
 
   var homeIco = '<div class="ico">' +
     (homeOn ? '<img class="fill-home" src="' + ASSET.tabHomeOnV + '" alt="">' : '') +
@@ -39,7 +40,9 @@ function bottomNav(active) {
       '<button class="tab" data-go="home">'       + homeIco + '<span>홈</span></button>' +
       '<button class="tab" data-go="chat-list">'  + chatIco + '<span>대화</span></button>' +
       '<button class="tab"><div class="ico"><img class="base" src="' + ASSET.tabLetter + '" alt=""></div><span>편지</span></button>' +
-      '<button class="tab"><div class="ico"><img class="base" src="' + ASSET.tabMy + '" alt=""></div><span>마이</span></button>' +
+      '<button class="tab" data-go="my"><div class="ico">' +
+        (myOn ? '<img class="fill-my" src="' + ASSET.tabMyOnV + '" alt="">' : '') +
+        '<img class="base" src="' + (myOn ? ASSET.tabMyOn : ASSET.tabMy) + '" alt=""></div><span>마이</span></button>' +
     '</nav>';
 }
 
@@ -416,6 +419,254 @@ function scFortune() {
     '</div>';
 }
 
+
+/* ============================================================
+   마이페이지 (Figma 06-*)
+   ============================================================ */
+
+/* 서브페이지 공통 헤더: ‹ + 제목 */
+function subBar(backId, title) {
+  return '<header class="appbar appbar--sub">' +
+    '<button class="icon20" data-go="' + backId + '"><img src="' + ASSET.chevronDim + '" alt="뒤로"></button>' +
+    '<p class="sub-title">' + esc(title) + '</p>' +
+  '</header>';
+}
+
+function seedIcon() {
+  return '<span class="stack">' +
+    '<img class="v1" src="' + ASSET.seedV1 + '" alt="">' +
+    '<img class="v2" src="' + ASSET.seedV2 + '" alt="">' +
+    '<img class="base" src="' + ASSET.seed + '" alt="">' +
+  '</span>';
+}
+
+/* ---------- 06 마이페이지 ---------- */
+function scMy(state) {
+  return '' +
+    '<div class="screen screen--paper">' +
+      statusBar() +
+      '<header class="appbar"><div class="lead"><p class="title">마이</p></div></header>' +
+      '<div class="my-body">' +
+        '<p class="my-section">프로필</p>' +
+
+        '<div class="my-card my-card--profile">' +
+          '<button class="my-profile" data-go="my-edit">' +
+            '<span class="my-profile-l">' +
+              '<img class="avatar44" src="' + ASSET.avatarMe + '" alt="">' +
+              '<span class="my-profile-t">' +
+                '<span class="nm">' + esc(ME.name) + '<em class="sex">' + esc(ME.sex) + '</em></span>' +
+                '<span class="sub">' + esc(ME.birth) + '</span>' +
+              '</span>' +
+            '</span>' +
+            '<img class="chev" src="' + ASSET.chevron + '" alt="">' +
+          '</button>' +
+          '<div class="my-divider"></div>' +
+          '<div class="my-seed-row">' +
+            '<span class="lbl">내 씨앗</span>' +
+            '<span class="val">' + seedIcon() + '<span>' + state.seeds + '개</span></span>' +
+          '</div>' +
+          '<div class="my-seed-btns">' +
+            '<button class="gray-btn" data-go="my-charge">충전하기</button>' +
+            '<button class="gray-btn" data-go="my-history">내역보기</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="my-card my-row">' +
+          '<img class="avatar34" src="' + ASSET.avatarTori + '" alt="">' +
+          '<span class="my-row-t">' +
+            '<span class="nm">' + esc(ME.pet.name) + '</span>' +
+            '<span class="sub">' + esc(ME.pet.desc) + '</span>' +
+          '</span>' +
+          '<img class="chev" src="' + ASSET.chevron + '" alt="">' +
+        '</div>' +
+
+        '<p class="my-section">설정</p>' +
+        '<button class="my-card my-menu" data-go="my-data">' +
+          '<span class="lbl">데이터 관리 · 대화 보관</span>' +
+          '<img class="chev" src="' + ASSET.chevron + '" alt="">' +
+        '</button>' +
+        '<div class="my-card my-menu my-menu--off">' +
+          '<span class="lbl">로그아웃</span>' +
+          '<img class="chev" src="' + ASSET.chevronDim + '" alt="">' +
+        '</div>' +
+      '</div>' +
+      bottomNav('my') +
+    '</div>';
+}
+
+/* ---------- 06-1 회원정보 수정 ---------- */
+function editFormMarkup(state) {
+  var f = state.form;
+  var num = function (val, unit) {
+    return '<span class="num-field">' +
+      '<span class="num-box">' + esc(val) + '</span>' +
+      '<span class="unit">' + esc(unit) + '</span>' +
+    '</span>';
+  };
+  return '' +
+    '<div class="edit-body">' +
+      '<div class="edit-fields">' +
+        '<div class="field"><p class="field-label">이름</p>' +
+          '<div class="text-box">' + esc(f.name) + '</div></div>' +
+
+        '<div class="field"><p class="field-label">생년월일</p>' +
+          '<div class="num-row">' + num(f.year, '년') + num(f.month, '월') + num(f.day, '일') + '</div>' +
+        '</div>' +
+
+        '<div class="field"><p class="field-label">태어난 시간</p>' +
+          '<div class="num-row num-row--2">' + num(f.hour, '시') + num(f.minute, '분') + '</div>' +
+          '<label class="chk chk--sm"><input type="checkbox" id="chk-unknown-time"' + (f.unknownTime ? ' checked' : '') + '>' +
+            '<span class="box"></span><span class="txt">태어난 시간을 모르겠어!</span></label>' +
+        '</div>' +
+
+        '<div class="field"><p class="field-label">출생지역 </p>' +
+          '<div class="text-box">' + esc(f.region) + '</div></div>' +
+
+        '<div class="field"><p class="field-label">성별</p>' +
+          '<div class="gender-row">' +
+            ['남성', '여성'].map(function (g) {
+              return '<button class="gender' + (f.gender === g ? ' on' : '') + '" data-gender="' + g + '">' + g + '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+
+        '<div class="edit-quit"><button class="link-btn" data-go="my-withdraw">회원탈퇴하기</button></div>' +
+      '</div>' +
+      '<button class="primary-btn" data-go="my-edit-confirm">저장하기</button>' +
+    '</div>';
+}
+
+function scMyEdit(state) {
+  return '<div class="screen screen--paper">' + statusBar() +
+    subBar('my-edit-cancel', '회원정보수정') + editFormMarkup(state) + '</div>';
+}
+
+/* 마이페이지 계열 팝업 (Figma: 305 x auto, radius 16, 딤 검정 30%) */
+function myModal(mod, cancelGo, confirmGo, confirmId) {
+  var confirmAttr = confirmId ? ' id="' + confirmId + '"' : ' data-go="' + confirmGo + '"';
+  return '' +
+    '<div class="dim dim--soft" data-go="' + cancelGo + '"></div>' +
+    '<div class="modal modal--my">' +
+      '<p class="m-title">' + esc(mod.title) + '</p>' +
+      '<p class="m-body">' + esc(mod.body) + '</p>' +
+      '<div class="m-actions">' +
+        '<button class="cancel" data-go="' + cancelGo + '">' + esc(mod.cancel) + '</button>' +
+        '<button class="confirm"' + confirmAttr + '>' + esc(mod.confirm) + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function scMyEditConfirm(state) {
+  return '<div class="screen screen--paper">' + statusBar() +
+    subBar('my-edit-cancel', '회원정보수정') + editFormMarkup(state) +
+    myModal(EDIT_CONFIRM, 'my-edit', null, 'btn-edit-save') + '</div>';
+}
+
+function scMyEditCancel(state) {
+  return '<div class="screen screen--paper">' + statusBar() +
+    subBar('my-edit-cancel', '회원정보수정') + editFormMarkup(state) +
+    myModal(EDIT_CANCEL, 'my-edit', 'my', null) + '</div>';
+}
+
+/* ---------- 06-2 데이터 관리 ---------- */
+function dataBodyMarkup() {
+  var items = ARCHIVED.map(function (a) {
+    return '<div class="arch-item">' +
+      '<img class="avatar34" src="' + a.avatar + '" alt="">' +
+      '<span class="arch-t"><span class="nm">' + esc(a.name) + '</span>' +
+      '<span class="at">' + esc(a.at) + '</span></span>' +
+    '</div>';
+  }).join('');
+  return '' +
+    '<div class="data-body">' +
+      '<button class="wide-row" data-go="my-summary">전체 대화 요약</button>' +
+      '<p class="my-section">보관된 대화</p>' +
+      '<div class="arch-list">' + items + '</div>' +
+    '</div>';
+}
+
+function scMyData() {
+  return '<div class="screen screen--paper">' + statusBar() +
+    subBar('my', '데이터 관리 · 대화 보관') + dataBodyMarkup() + '</div>';
+}
+
+function scMySummary() {
+  return '<div class="screen screen--paper">' + statusBar() +
+    subBar('my', '데이터 관리 · 대화 보관') + dataBodyMarkup() +
+    myModal(SUMMARY_MODAL, 'my-data', 'my-data', null) + '</div>';
+}
+
+/* ---------- 06-5 씨앗 충전 ---------- */
+function scMyCharge(state) {
+  var rows = SEED_PRODUCTS.map(function (p) {
+    return '<button class="seed-product"><span class="lbl">' + esc(p.label) + '</span>' +
+           '<span class="price">' + esc(p.price) + '</span></button>';
+  }).join('');
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() + subBar('my', '씨앗 충전') +
+      '<div class="charge-body">' +
+        '<div class="charge-top"><span class="lbl">보유 씨앗</span>' +
+          '<span class="val">' + seedIcon() + '<span>' + state.seeds + '개</span></span></div>' +
+        rows +
+        '<p class="charge-note">' + esc(SEED_NOTICE) + '</p>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 06-6 씨앗 내역 ---------- */
+function scMyHistory(state) {
+  var status = SEED_STATUS.map(function (s) {
+    return '<div class="hist-status"><span class="lbl' + (s.dim ? ' dim' : '') + '">' + esc(s.label) + '</span>' +
+           '<span class="num">' + esc(s.value) + '</span></div>';
+  }).join('');
+  var hist = SEED_HISTORY.map(function (h) {
+    return '<div class="hist-row"><span class="hist-t"><span class="nm">' + esc(h.label) + '</span>' +
+           '<span class="at">' + esc(h.at) + '</span></span>' +
+           '<span class="delta">' + esc(h.delta) + '</span></div>';
+  }).join('');
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() + subBar('my', '씨앗 내역') +
+      '<div class="hist-body">' +
+        '<div class="my-card hist-card">' +
+          '<p class="card-title">내 씨앗</p>' +
+          '<div class="hist-total">' + seedIcon() + '<span class="big">' + state.seeds + '</span></div>' +
+          '<div class="hist-line"></div>' + status +
+          '<button class="gray-btn gray-btn--wide" data-go="my-charge">충전하기</button>' +
+        '</div>' +
+        '<div class="my-card ticket-card">' +
+          '<p class="card-title">' + esc(SEED_TICKET.title) + '</p>' +
+          '<div class="ticket-row"><span class="nm">' + esc(SEED_TICKET.name) + '</span>' +
+            '<span class="until">' + esc(SEED_TICKET.until) + '</span></div>' +
+          '<p class="ticket-note">' + SEED_TICKET.note.map(esc).join('<br>') + '</p>' +
+        '</div>' +
+        '<div class="my-card hist-card">' +
+          '<p class="card-title">사용내역</p>' + hist +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 06-7 회원탈퇴 ---------- */
+function scMyWithdraw(state) {
+  var on = state.withdrawChecked;
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() + subBar('my-edit', '회원탈퇴') +
+      '<div class="quit-body">' +
+        '<div class="quit-top">' +
+          '<p class="quit-heading">' + esc(WITHDRAW.heading) + '</p>' +
+          '<div class="my-card quit-card">' +
+            '<p class="quit-card-title">' + esc(WITHDRAW.cardTitle) + '</p>' +
+            '<div class="quit-bullets">' + WITHDRAW.bullets.map(function (b) {
+              return '<p>' + esc(b) + '</p>'; }).join('') + '</div>' +
+          '</div>' +
+          '<label class="chk"><input type="checkbox" id="chk-withdraw"' + (on ? ' checked' : '') + '>' +
+            '<span class="box"></span><span class="txt">' + esc(WITHDRAW.check) + '</span></label>' +
+        '</div>' +
+        '<button class="primary-btn' + (on ? '' : ' is-off') + '"' + (on ? '' : ' disabled') + '>' +
+          esc(WITHDRAW.button) + '</button>' +
+      '</div>' +
+    '</div>';
+}
 /* ---------- 라우팅 테이블 ---------- */
 var SCREENS = {
   'home':          scHome,
@@ -430,5 +681,15 @@ var SCREENS = {
   'chat-delete':   scChatDelete,
   'attend':        scAttend,
   'attend-done':   scAttendDone,
-  'fortune':       scFortune
+  'fortune':       scFortune,
+
+  'my':              scMy,
+  'my-edit':         scMyEdit,
+  'my-edit-confirm': scMyEditConfirm,
+  'my-edit-cancel':  scMyEditCancel,
+  'my-data':         scMyData,
+  'my-summary':      scMySummary,
+  'my-charge':       scMyCharge,
+  'my-history':      scMyHistory,
+  'my-withdraw':     scMyWithdraw
 };

@@ -188,3 +188,102 @@ var SCREEN_INDEX = [
   { id: 'attend-done',   cat: '출첵',   label: '해바라기씨 받은 후' },
   { id: 'fortune',       cat: '운세',   label: '오늘의 운세' }
 ];
+
+/* ============================================================
+   마이페이지 (Figma 06-*)
+   ============================================================ */
+ASSET.tabMyOn   = A + 'icon/tab-my-on.png';
+ASSET.tabMyOnV  = A + 'icon/tab-my-on-v.svg';
+ASSET.chevron   = A + 'icon/chevron.svg';       /* #211A11 */
+ASSET.chevronDim= A + 'icon/chevron-dim.svg';   /* #B8B8B8 */
+ASSET.avatarMe  = A + 'img/avatar-me.png';
+ASSET.avatarTori= A + 'img/avatar-tori.png';
+
+var ME = {
+  name: '김뚱땅',
+  sex: '♀',
+  birth: '2001.08.22 17:40 대한민국 서울',
+  seeds: 12,
+  pet: { name: '토리', desc: '메인 햄스터 · 관리 · 이름 변경(1회 무료)' }
+};
+
+/* 06-1 회원정보 수정 */
+var PROFILE_FORM = {
+  name: '김뚱땅',
+  year: '2026', month: '08', day: '05',
+  hour: '00', minute: '00',
+  unknownTime: false,
+  region: '한국 서울시 고덕동',
+  gender: '남성'
+};
+
+/* 06-2 보관된 대화 */
+var ARCHIVED = [
+  { name: '회사내 인간관계 트러블과 업무 고민', at: '7.27', avatar: A + 'img/avatar-melang.png' },
+  { name: '남자친구와의 여행 계획',            at: '7.12', avatar: A + 'img/avatar-kochi.png' },
+  { name: '재테크와 주식투자 플랜 짜기',        at: '6.30', avatar: A + 'img/avatar-kochi.png' }
+];
+
+/* 06-3 전체 대화 요약 팝업 */
+var SUMMARY_MODAL = {
+  title: '전체 대화 요약',
+  body: '기존 코스메틱 브랜드의 새로운 마케팅 건에 대한 상사와의 의견 차이로 인한 갈등',
+  cancel: '취소하기', confirm: '확인하기'
+};
+
+/* 06-4 / 06-1 뒤로가기 팝업 */
+var EDIT_CONFIRM = {
+  title: '정말로 수정하시겠어요?',
+  body: '개인 정보를 수정시 수정된 정보로 대화가 진행되요. 수정 전 내용과 달라질 수 있습니다.  확인하셨나요?',
+  cancel: '취소하기', confirm: '수정하기'
+};
+var EDIT_CANCEL = {
+  title: '취소하시겠어요?',
+  body: '수정한 정보는 저장되지 않아요. 확인하셨나요?',
+  cancel: '취소하기', confirm: '수정하기'
+};
+
+/* 06-5 씨앗 충전 */
+var SEED_PRODUCTS = [
+  { label: ' 씨앗 1',  price: '₩200' },
+  { label: ' 씨앗 3',  price: '₩500' },
+  { label: ' 씨앗 10', price: '₩900' }
+];
+var SEED_NOTICE = '· 구매한 씨앗은 365일내 사용이 가능해요';
+
+/* 06-6 씨앗 내역 */
+var SEED_STATUS = [
+  { label: '오늘 안에 써야 하는 씨앗', value: '0', dim: false },
+  { label: '30일 안에 사라지는 씨앗',  value: '0', dim: true }
+];
+var SEED_TICKET = {
+  title: '이용권', name: '첫 편지 무료권 1회', until: '9월 10일까지',
+  note: ['첫 편지 열어보기에 자동 사용되요.', '기한이 지나면 소멸되요.  * 이월 불가']
+};
+var SEED_HISTORY = [
+  { label: '출석 체크',     at: '2026.08.22', delta: '+ 1' },
+  { label: '출석 체크',     at: '2026.08.20', delta: '+ 1' },
+  { label: '8월 편지 개봉', at: '2026.08.04', delta: '- 49' }
+];
+
+/* 06-7 회원탈퇴 */
+var WITHDRAW = {
+  heading: '정말 떠나는 거야?',
+  cardTitle: '탈퇴 시 아래 내용이 즉시 적용돼요',
+  bullets: ['· 모든 대화, 편지, 씨앗, 사주 정보가 즉시 전체 삭제돼요',
+            '· 재가입해도 삭제된 데이터는 복구할 수 없어요'],
+  check: '위 내용을 확인했어요',
+  button: '탈퇴하기'
+};
+
+SCREEN_INDEX.push(
+  { id: 'my',              cat: '마이', label: '06 마이페이지' },
+  { id: 'my-edit',         cat: '마이', label: '06-1 회원정보 수정' },
+  { id: 'my-edit-confirm', cat: '마이', label: '06-4 수정 확인 팝업' },
+  { id: 'my-edit-cancel',  cat: '마이', label: '06-1 뒤로가기 팝업' },
+  { id: 'my-data',         cat: '마이', label: '06-2 데이터 관리' },
+  { id: 'my-summary',      cat: '마이', label: '06-3 전체 대화 요약' },
+  { id: 'my-charge',       cat: '마이', label: '06-5 씨앗 충전' },
+  { id: 'my-history',      cat: '마이', label: '06-6 씨앗 내역' },
+  { id: 'my-withdraw',     cat: '마이', label: '06-7 회원탈퇴' }
+);
