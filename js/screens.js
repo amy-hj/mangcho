@@ -1181,13 +1181,15 @@ function onbArt(o) {
 function scOnboarding(state, idx) {
   var o = ONBOARDING[idx];
   var next = ONBOARDING[idx + 1] ? ONBOARDING[idx + 1].id : 'onb-login';
+  var last = idx === ONBOARDING.length - 1;
   var dots = ONBOARDING.map(function (_, i) {
     return '<span class="onb-dot' + (i === idx ? ' on' : '') + '"></span>';
   }).join('');
 
   return '' +
     '<div class="screen screen--paper">' + statusBar() +
-      '<button class="onb-skip" data-go="onb-login">' + esc(ONB_SKIP) + '</button>' +
+      /* 마지막 장(온보딩 4)엔 건너뛰기가 없습니다 — Figma 와 동일 */
+      (last ? '' : '<button class="onb-skip" data-go="onb-login">' + esc(ONB_SKIP) + '</button>') +
       onbArt(o) +
       '<div class="onb-copy">' +
         '<p class="onb-title">' + o.title.map(esc).join('<br>') + '</p>' +
