@@ -886,6 +886,21 @@ function chapterBlocks(id) {
         '<div class="ch-text">' + paras + '</div>' +
       '</section>';
     }
+    if (b.type === 'gauge') {
+      var gcards = b.cards.map(function (c) {
+        return '<div class="ch-gcard' + (b.flip ? ' is-flip' : '') + '">' +
+          '<p class="ch-gt">' + esc(c.t) + '</p>' +
+          '<p class="ch-gd">' + esc(c.d) + '</p>' +
+        '</div>';
+      }).join('');
+      return '<section class="ch-sec ch-gauge">' +
+        '<div class="ch-gauge-head">' +
+          '<span class="ch-badge">' + esc(b.badge) + '</span>' +
+          '<span class="ch-gauge-cap">' + esc(b.caption) + '</span>' +
+        '</div>' +
+        '<div class="ch-gcards">' + gcards + '</div>' +
+      '</section>';
+    }
     if (b.type === 'quote') {
       return '<section class="ch-sec">' +
         '<p class="ch-label">' + esc(b.label) + '</p>' +
