@@ -886,6 +886,56 @@ function chapterBlocks(id) {
         '<div class="ch-text">' + paras + '</div>' +
       '</section>';
     }
+    if (b.type === 'quotes') {
+      return '<section class="ch-sec ch-quotes">' +
+        '<p class="ch-label ch-label--dark">' + esc(b.label) + '</p>' +
+        b.items.map(function (q) {
+          return '<div class="ch-quoteline">' +
+            '<span class="t">' + esc(q.t).replace(/\n/g, '<br>') + '</span>' +
+            '<span class="d">' + esc(q.d) + '</span>' +
+          '</div>';
+        }).join('') +
+      '</section>';
+    }
+    if (b.type === 'panel') {
+      return '<section class="ch-sec">' +
+        '<p class="ch-label ch-label--dark">' + esc(b.label) + '</p>' +
+        '<div class="ch-panel">' + b.lines.map(esc).join('<br>') + '</div>' +
+      '</section>';
+    }
+    if (b.type === 'cycle') {
+      var steps = b.steps.map(function (s, i) {
+        return (i ? '<p class="ch-arrow">↓</p>' : '') +
+          '<div class="ch-step">' +
+            '<p class="k">' + esc(s.k) + '</p>' +
+            '<p class="v">' + s.lines.map(esc).join('<br>') + '</p>' +
+            (s.badge ? '<span class="ch-badge">' + esc(s.badge) + '</span>' : '') +
+          '</div>';
+      }).join('');
+      return '<section class="ch-sec ch-cycle">' +
+        '<p class="ch-label ch-label--dark">' + esc(b.label) + '</p>' +
+        '<div class="ch-steps">' + steps + '</div>' +
+      '</section>';
+    }
+    if (b.type === 'rx') {
+      return '<section class="ch-sec ch-rx">' +
+        '<div class="ch-gauge-head">' +
+          '<span class="ch-badge">' + esc(b.badge) + '</span>' +
+          '<span class="ch-rx-title">' + esc(b.title) + '</span>' +
+        '</div>' +
+        '<div class="ch-text">' + b.paras.map(function (p) {
+          return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>'; }).join('') + '</div>' +
+        (b.tip ? '<div class="ch-tip">' +
+          '<p class="ch-label">추천 문장</p>' +
+          '<p class="v">' + esc(b.tip).replace(/\n/g, '<br>') + '</p>' +
+        '</div>' : '') +
+        (b.why ? '<div class="ch-why">' +
+          '<p class="ch-label">이 처방이 네 것인 이유</p>' +
+          '<div class="ch-text">' + b.why.map(function (p) {
+            return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>'; }).join('') + '</div>' +
+        '</div>' : '') +
+      '</section>';
+    }
     if (b.type === 'stats') {
       return '<section class="ch-sec ch-stats">' + b.items.map(function (s) {
         return '<div class="ch-stat"><p class="n">' + esc(s.n) + '</p><p class="l">' + esc(s.l) + '</p></div>';
