@@ -1,13 +1,33 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 /* ============================================================
-   Hamnal — 주화면 프로토타입
-   출처: Figma 2팀 망초생 / 디자인시스템_최종 / Design / 주화면 1–10
+   멜랑코치 — 프로토타입
+   출처: Figma 2팀 망초생 / 디자인시스템_최종 / Design
    ============================================================ */
 
-/* ---------- 폰트 ----------
-   Ownglyph PDH(온글잎 박다현체)는 assets/font/ 에 파일을 넣으면 자동 적용됩니다.
-   파일명: OwnglyphPDH.woff2  또는  OwnglyphPDH.ttf
-   Pretendard 는 온라인이면 CDN, 아니면 시스템 고딕으로 대체됩니다.            */
+/* ---------- 폰트 · 전부 저장소 안의 파일 (외부 CDN 없음) ----------
+   Figma 는 Pretendard 와 Pretendard Variable 을 섞어 쓰지만 같은 서체라,
+   가변폰트 하나로 300~700 굵기를 모두 덮습니다.
+   정적 Regular/Medium 을 뒤에 둬서 가변폰트를 못 읽는 환경도 대비합니다.    */
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../assets/font/PretendardVariable.woff2') format('woff2-variations');
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard Fallback';
+  src: url('../assets/font/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard Fallback';
+  src: url('../assets/font/Pretendard-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: 'Ownglyph PDH';
   src: url('../assets/font/OwnglyphPDH.woff2') format('woff2');
@@ -36,11 +56,11 @@
   --status-ink:     #021433;
 
   /* 서체 */
-  --font-hand: 'Ownglyph PDH', 'Ownglyph_PDH', 'Pretendard',
+  --font-hand: 'Ownglyph PDH', 'Pretendard', 'Pretendard Fallback',
                'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-body: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic',
-               -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-ui:   'Inter', 'Pretendard', -apple-system, sans-serif;
+  --font-body: 'Pretendard', 'Pretendard Fallback',
+               'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-ui:   'Inter', 'Pretendard', 'Pretendard Fallback', sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
