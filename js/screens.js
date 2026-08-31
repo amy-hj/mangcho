@@ -427,7 +427,7 @@ function scFortune() {
 /* 서브페이지 공통 헤더: ‹ + 제목 */
 function subBar(backId, title) {
   return '<header class="appbar appbar--sub">' +
-    '<button class="icon20" data-go="' + backId + '"><img src="' + ASSET.chevronDim + '" alt="뒤로"></button>' +
+    '<button class="icon20" data-go="' + backId + '"><img src="' + ASSET.backSub + '" alt="뒤로"></button>' +
     '<p class="sub-title">' + esc(title) + '</p>' +
   '</header>';
 }
@@ -445,7 +445,7 @@ function scMy(state) {
   return '' +
     '<div class="screen screen--paper">' +
       statusBar() +
-      '<header class="appbar"><div class="lead"><p class="title">마이</p></div></header>' +
+      '<header class="appbar appbar--my"><div class="lead"><p class="title">마이</p></div></header>' +
       '<div class="my-body">' +
         '<p class="my-section">프로필</p>' +
 
@@ -565,7 +565,7 @@ function scMyEditConfirm(state) {
 function scMyEditCancel(state) {
   return '<div class="screen screen--paper">' + statusBar() +
     subBar('my-edit-cancel', '회원정보수정') + editFormMarkup(state) +
-    myModal(EDIT_CANCEL, 'my-edit', 'my', null) + '</div>';
+    myModal(EDIT_CANCEL, 'my', 'my-edit', null) + '</div>';
 }
 
 /* ---------- 06-2 데이터 관리 ---------- */
@@ -597,18 +597,40 @@ function scMySummary() {
 }
 
 /* ---------- 06-5 씨앗 충전 ---------- */
-function scMyCharge(state) {
-  var rows = SEED_PRODUCTS.map(function (p) {
-    return '<button class="seed-product"><span class="lbl">' + esc(p.label) + '</span>' +
+function chargeBodyMarkup(state) {
+  var rows = SEED_PRODUCTS.map(function (p, i) {
+    return '<button class="seed-product" data-buy="' + i + '">' +
+           '<span class="lbl">' + esc(p.label) + '</span>' +
            '<span class="price">' + esc(p.price) + '</span></button>';
   }).join('');
   return '' +
+    '<div class="charge-body">' +
+      '<div class="charge-top"><span class="lbl">보유 씨앗</span>' +
+        '<span class="val">' + seedIcon() + '<span>' + state.seeds + '개</span></span></div>' +
+      rows +
+      '<p class="charge-note">' + esc(SEED_NOTICE) + '</p>' +
+    '</div>';
+}
+
+function scMyCharge(state) {
+  return '<div class="screen screen--paper">' + statusBar() + subBar('my', '씨앗 충전') +
+    chargeBodyMarkup(state) + '</div>';
+}
+
+/* 상품 탭 → 결제 안내 팝업 (Figma 모달-결제안내) */
+function scMyChargePay(state) {
+  var p = SEED_PRODUCTS[state.payIndex] || SEED_PRODUCTS[0];
+  return '' +
     '<div class="screen screen--paper">' + statusBar() + subBar('my', '씨앗 충전') +
-      '<div class="charge-body">' +
-        '<div class="charge-top"><span class="lbl">보유 씨앗</span>' +
-          '<span class="val">' + seedIcon() + '<span>' + state.seeds + '개</span></span></div>' +
-        rows +
-        '<p class="charge-note">' + esc(SEED_NOTICE) + '</p>' +
+      chargeBodyMarkup(state) +
+      '<div class="dim dim--soft" data-go="my-charge"></div>' +
+      '<div class="modal modal--pay">' +
+        '<p class="m-title">' + esc(PAY_MODAL.title) + '</p>' +
+        '<p class="m-body">' + esc(p.desc) + '<br>' + esc(PAY_MODAL.ask) + '</p>' +
+        '<div class="m-actions">' +
+          '<button class="cancel" data-go="my-charge">' + esc(PAY_MODAL.cancel) + '</button>' +
+          '<button class="confirm" id="btn-buy-seed">' + esc(PAY_MODAL.confirm) + '</button>' +
+        '</div>' +
       '</div>' +
     '</div>';
 }
@@ -616,7 +638,7 @@ function scMyCharge(state) {
 /* ---------- 06-6 씨앗 내역 ---------- */
 function scMyHistory(state) {
   var status = SEED_STATUS.map(function (s) {
-    return '<div class="hist-status"><span class="lbl' + (s.dim ? ' dim' : '') + '">' + esc(s.label) + '</span>' +
+    return '<div class="hist-status"><span class="lbl' + (s.muted ? ' muted' : '') + '">' + esc(s.label) + '</span>' +
            '<span class="num">' + esc(s.value) + '</span></div>';
   }).join('');
   var hist = SEED_HISTORY.map(function (h) {
@@ -662,8 +684,34 @@ function scMyWithdraw(state) {
           '<label class="chk"><input type="checkbox" id="chk-withdraw"' + (on ? ' checked' : '') + '>' +
             '<span class="box"></span><span class="txt">' + esc(WITHDRAW.check) + '</span></label>' +
         '</div>' +
-        '<button class="primary-btn' + (on ? '' : ' is-off') + '"' + (on ? '' : ' disabled') + '>' +
+        '<button class="primary-btn' + (on ? '' : ' is-off') + '"' + (on ? ' data-go="my-bye"' : ' disabled') + '>' +
           esc(WITHDRAW.button) + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+/* 탈퇴하기 누른 뒤 — 탈퇴 완료 팝업 (Figma 모달-탈퇴완료) */
+function scMyBye(state) {
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() + subBar('my-edit', '회원탈퇴') +
+      '<div class="quit-body">' +
+        '<div class="quit-top">' +
+          '<p class="quit-heading">' + esc(WITHDRAW.heading) + '</p>' +
+          '<div class="my-card quit-card">' +
+            '<p class="quit-card-title">' + esc(WITHDRAW.cardTitle) + '</p>' +
+            '<div class="quit-bullets">' + WITHDRAW.bullets.map(function (b) {
+              return '<p>' + esc(b) + '</p>'; }).join('') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<button class="primary-btn">' + esc(WITHDRAW.button) + '</button>' +
+      '</div>' +
+      '<div class="dim dim--soft"></div>' +
+      '<div class="modal modal--bye">' +
+        '<p class="m-title">' + esc(BYE_MODAL.title) + '</p>' +
+        '<p class="m-body">' + esc(BYE_MODAL.body) + '</p>' +
+        '<div class="m-actions">' +
+          '<button class="confirm" data-go="my">' + esc(BYE_MODAL.confirm) + '</button>' +
+        '</div>' +
       '</div>' +
     '</div>';
 }
@@ -690,6 +738,8 @@ var SCREENS = {
   'my-data':         scMyData,
   'my-summary':      scMySummary,
   'my-charge':       scMyCharge,
+  'my-charge-pay':   scMyChargePay,
   'my-history':      scMyHistory,
-  'my-withdraw':     scMyWithdraw
+  'my-withdraw':     scMyWithdraw,
+  'my-bye':          scMyBye
 };

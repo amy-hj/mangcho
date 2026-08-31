@@ -50,7 +50,13 @@ function initialState() {
     msgs:      CHAT_ONGOING.slice(),
     startMsgs: CHAT_START.slice(),
     draft:        '',
-    showSuggests: true
+    showSuggests: true,
+
+    /* 마이페이지 */
+    seeds:           ME.seeds,
+    form:            Object.assign({}, PROFILE_FORM),
+    withdrawChecked: false,
+    payIndex:        0
   };
   return s;
 }
@@ -249,6 +255,25 @@ viewport.addEventListener('click', function (e) {
     return;
   }
 
+  el = e.target.closest('[data-buy]');
+  if (el) { state.payIndex = Number(el.dataset.buy); go('my-charge-pay'); return; }
+
+  if (e.target.closest('#btn-buy-seed')) {
+    state.seeds += (SEED_PRODUCTS[state.payIndex] || { qty: 0 }).qty;
+    navStack = [];
+    render('my-charge', { replace: true });
+    return;
+  }
+
+  el = e.target.closest('[data-gender]');
+  if (el) { state.form.gender = el.dataset.gender; render(state.current, { replace: true }); return; }
+
+  if (e.target.closest('#btn-edit-save')) {
+    navStack = [];
+    render('my', { replace: true });
+    return;
+  }
+
   if (e.target.closest('#btn-rename')) {
     var ri = viewport.querySelector('#rename-input');
     var v = ri ? ri.value.trim() : '';
@@ -291,6 +316,17 @@ viewport.addEventListener('keydown', function (e) {
   }
 });
 
+viewport.addEventListener('change', function (e) {
+  if (e.target.id === 'chk-withdraw') {
+    state.withdrawChecked = e.target.checked;
+    render(state.current, { replace: true });
+  }
+  if (e.target.id === 'chk-unknown-time') {
+    state.form.unknownTime = e.target.checked;
+    render(state.current, { replace: true });
+  }
+});
+
 viewport.addEventListener('input', function (e) {
   if (e.target.id === 'rename-input') {
     var c = viewport.querySelector('#rename-count');
@@ -325,6 +361,10 @@ function jump(id) {
     state.msgs = state.msgsByRoom.r1 || (state.msgsByRoom.r1 = CHAT_ONGOING.slice());
     state.roomName = ONGOING_ROOM_NAME;
     state.draft = (id === 'chat') ? ONGOING_DRAFT : '';
+  }
+  if (id.indexOf('my') === 0) {
+    state.form = Object.assign({}, PROFILE_FORM);
+    if (id === 'my-withdraw' || id === 'my-bye') state.withdrawChecked = (id === 'my-bye');
   }
   navStack = [];
   render(id, { replace: true });
