@@ -374,7 +374,7 @@ function scAttendDone() {
       attendBackdrop() +
       '<div class="dim dim--strong" data-go="attend"></div>' +
       '<div class="modal modal--attend">' +
-        '<p class="m-title m-title--hand">' + esc(ATTEND_DONE.title) + '</p>' +
+        '<p class="m-title">' + esc(ATTEND_DONE.title) + '</p>' +
         '<div class="m-desc">' + ATTEND_DONE.desc.map(esc).join('<br>') + '</div>' +
         '<button class="confirm confirm--wide" data-go="attend">' + esc(ATTEND_DONE.confirm) + '</button>' +
       '</div>' +

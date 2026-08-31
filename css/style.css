@@ -165,7 +165,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .appbar .icon20 { width: 20px; height: 20px; flex: none; }
 .appbar .icon24 { width: 24px; height: 24px; flex: none; }
 .appbar .title {
-  font-family: var(--font-hand); font-size: 27px; line-height: normal;
+  font-family: var(--font-body); font-weight: 500; font-size: 20px; line-height: normal;
   color: var(--text-primary); white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis; max-width: 260px;
 }
@@ -277,7 +277,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .msg-row .avatar img { width: 100%; height: 100%; }
 .msg-col { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .msg-col .who {
-  font-family: var(--font-hand); font-size: 14px; color: var(--text-primary);
+  font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--text-primary);
   padding: 0 16px; white-space: nowrap;
 }
 
@@ -288,7 +288,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .bubble--other { padding: 12px 16px 12px 28px; background-image: url('../assets/icon/bubble-other.svg'); }
 .bubble--me    { padding: 12px 28px 12px 16px; background-image: url('../assets/icon/bubble-me.svg'); }
-.bubble .txt   { font-family: var(--font-body); font-size: 18px; line-height: 1.35; color: var(--text-primary); max-width: 176px; }
+.bubble .txt   { font-family: var(--font-body); font-size: 15px; line-height: 1.35; color: var(--text-primary); max-width: 176px; }
 .bubble .at    { align-self: flex-end; font-family: var(--font-body); font-size: 12px; color: var(--text-disabled); }
 
 /* 입력 바 */
@@ -306,7 +306,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .composer .field input {
   width: 263px; border: 0; background: none; outline: none;
-  font-family: var(--font-body); font-size: 17px; color: var(--text-primary);
+  font-family: var(--font-body); font-size: 15px; color: var(--text-primary);
 }
 .composer .field input::placeholder { color: var(--text-disabled); }
 /* 화살표 SVG는 아래를 향하고 있어 Figma와 동일하게 180° 돌려 씁니다 */
@@ -336,7 +336,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: 10px 20px;
 }
 .list-wrap .list-title {
-  font-family: var(--font-hand); font-size: 27px; color: var(--text-primary);
+  font-family: var(--font-body); font-weight: 500; font-size: 20px; color: var(--text-primary);
   display: flex; align-items: center; width: 100%;
 }
 .list-items { display: flex; flex-direction: column; gap: 10px; width: 100%; }
@@ -350,13 +350,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .list-item .avatar img { width: 100%; height: 100%; }
 .list-item .body { flex: 1 0 0; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .list-item .nm {
-  font-family: var(--font-hand); font-size: 19px; color: var(--text-primary);
+  font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--text-primary);
   max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 /* 고정 표시는 "꽉 찬" 핀(#B8B8B8)입니다 — 메뉴의 외곽선 핀과 다른 에셋.
    Figma는 제목 / 핀 / 시간을 한 줄에서 space-between 으로 나눕니다. */
 .list-item .pin { width: 12px; height: 12px; flex: none; }
-.list-item .at { flex: none; font-family: var(--font-body); font-size: 13px; color: var(--text-disabled); white-space: nowrap; }
+.list-item .at { flex: none; font-family: var(--font-body); font-size: 12px; color: var(--text-disabled); white-space: nowrap; }
 
 /* ============================================================
    주화면 8 — 대화방 메뉴
@@ -382,7 +382,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .room-menu .mi { width: 24px; height: 24px; flex: none; display: flex; align-items: center; justify-content: center; }
 .room-menu .mi img { width: 24px; height: 24px; }
 .room-menu .mi img.sm { width: 16px; height: 16px; }
-.room-menu span { font-family: var(--font-body); font-weight: 500; font-size: 16px; color: var(--text-primary); white-space: nowrap; }
+.room-menu span { font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--text-primary); white-space: nowrap; }
 
 /* ============================================================
    주화면 9·10 — 팝업 (10-1 / 10-2)
@@ -399,7 +399,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--text-primary); text-align: center; white-space: nowrap;
 }
 .modal .m-desc {
-  font-family: var(--font-body); font-size: 12px; line-height: 1.5;
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
   color: var(--text-secondary); text-align: center;
 }
 .modal .m-field { width: 269px; display: flex; flex-direction: column; gap: 10px; }
@@ -407,17 +407,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .modal .m-field .row { height: 18px; display: flex; align-items: center; gap: 8px; }
 .modal .m-field input {
   flex: 1 0 0; min-width: 0; border: 0; outline: none; background: none;
-  font-family: var(--font-ui); font-size: 14px; color: var(--text-primary);
+  font-family: var(--font-body); font-size: 15px; color: var(--text-primary);
 }
 .modal .m-field .count {
-  flex: none; font-family: var(--font-ui); font-size: 10px;
+  flex: none; font-family: var(--font-body); font-size: 12px;
   color: var(--text-secondary); white-space: nowrap;
 }
 .modal .m-field .line { width: 266.5px; height: 1px; background: var(--text-primary); }
 .modal .m-actions { display: flex; gap: 10px; width: 100%; }
 .modal .m-actions button {
   flex: 1 0 0; min-width: 0; padding: 12px 0; border-radius: 10px;
-  font-family: var(--font-body); font-weight: 700; font-size: 13px;
+  font-family: var(--font-body); font-weight: 600; font-size: 16px;
 }
 .modal .m-actions .cancel  { background: var(--bg-default); color: var(--text-disabled); }
 .modal .m-actions .confirm { background: var(--accent-primary); color: var(--text-inverse); }
@@ -473,11 +473,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* 출석 완료 카드 */
 .modal--attend { left: 35px; top: 326px; gap: 10px; }
-.m-title--hand { font-family: var(--font-hand); font-size: 20px; font-weight: 400; }
+.modal.modal--attend .m-title { font-family: var(--font-hand); font-size: 25px; font-weight: 400; }
 .confirm--wide {
   width: 100%; padding: 12px 0; border-radius: 10px;
   background: var(--accent-primary); color: var(--text-inverse);
-  font-family: var(--font-body); font-weight: 700; font-size: 16px;
+  font-family: var(--font-body); font-weight: 600; font-size: 16px;
 }
 .confirm--wide:active { transform: scale(.98); }
 
