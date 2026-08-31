@@ -26,6 +26,7 @@ function bottomNav(active) {
   var homeOn = active === 'home';
   var chatOn = active === 'chat';
   var myOn   = active === 'my';
+  var ltOn   = active === 'letter';
 
   var homeIco = '<div class="ico">' +
     (homeOn ? '<img class="fill-home" src="' + ASSET.tabHomeOnV + '" alt="">' : '') +
@@ -39,7 +40,9 @@ function bottomNav(active) {
     '<nav class="bottomnav">' +
       '<button class="tab" data-go="home">'       + homeIco + '<span>홈</span></button>' +
       '<button class="tab" data-go="chat-list">'  + chatIco + '<span>대화</span></button>' +
-      '<button class="tab"><div class="ico"><img class="base" src="' + ASSET.tabLetter + '" alt=""></div><span>편지</span></button>' +
+      '<button class="tab" data-go="letter-ready"><div class="ico">' +
+        (ltOn ? '<img class="fill-letter" src="' + ASSET.tabLetterOnV + '" alt="">' : '') +
+        '<img class="base" src="' + (ltOn ? ASSET.tabLetterOn : ASSET.tabLetter) + '" alt=""></div><span>편지</span></button>' +
       '<button class="tab" data-go="my"><div class="ico">' +
         (myOn ? '<img class="fill-my" src="' + ASSET.tabMyOnV + '" alt="">' : '') +
         '<img class="base" src="' + (myOn ? ASSET.tabMyOn : ASSET.tabMy) + '" alt=""></div><span>마이</span></button>' +
@@ -715,6 +718,141 @@ function scMyBye(state) {
       '</div>' +
     '</div>';
 }
+
+/* ============================================================
+   편지 (Figma 편지2~5)
+   ============================================================ */
+
+/* 편지 목록 헤더 — 뒤로가기 + 제목 */
+function letterBar(backId, title, share) {
+  return '<header class="appbar appbar--letter">' +
+    '<div class="lead">' +
+      '<button class="icon20" data-go="' + backId + '"><img src="' + ASSET.backSub + '" alt="뒤로"></button>' +
+      '<p class="sub-title">' + esc(title) + '</p>' +
+    '</div>' +
+    (share ? '<span class="share"><img src="' + ASSET.share + '" alt="공유"></span>' : '') +
+  '</header>';
+}
+
+/* 개봉한 편지 목록 (편지3·4 공용) */
+function openedListMarkup() {
+  var rows = LETTER.opened.map(function (o) {
+    var thumb = o.locked
+      ? '<span class="lock-badge"><img src="' + ASSET.lock + '" alt="잠김"></span>'
+      : '<img class="avatar34" src="' + ASSET.letterAvatar + '" alt="">';
+    return '<div class="letter-row' + (o.locked ? ' letter-row--locked' : '') + '">' +
+      thumb + '<span class="nm">' + esc(o.title) + '</span></div>';
+  }).join('');
+  return '<p class="letter-section">' + esc(LETTER.openedLabel) + '</p>' +
+         '<div class="letter-rows">' + rows + '</div>';
+}
+
+/* ---------- 편지2 · 받은 편지 없음 ---------- */
+function scLetterEmpty() {
+  return '' +
+    '<div class="screen screen--paper">' +
+      statusBar() +
+      letterBar('home', LETTER.listTitle) +
+      '<div class="empty-state">' +
+        '<img class="art art--sad" src="' + ASSET.charSad + '" alt="">' +
+        '<p>' + esc(LETTER.emptyText) + '</p>' +
+      '</div>' +
+      bottomNav('letter') +
+    '</div>';
+}
+
+/* ---------- 편지3 · 생성 전 ---------- */
+function scLetterList() {
+  return '' +
+    '<div class="screen screen--paper">' +
+      statusBar() +
+      letterBar('home', LETTER.listTitle) +
+      '<div class="letter-body">' +
+        '<div class="letter-card letter-card--writing">' +
+          '<img class="thumb35" src="' + ASSET.hourglass + '" alt="">' +
+          '<span class="letter-card-t">' +
+            '<span class="nm">' + esc(LETTER.writing.title) + '</span>' +
+            '<span class="sub">' + esc(LETTER.writing.sub) + '</span>' +
+          '</span>' +
+        '</div>' +
+        openedListMarkup() +
+      '</div>' +
+      bottomNav('letter') +
+    '</div>';
+}
+
+/* ---------- 편지4 · 생성 후 (개봉하기) ---------- */
+function scLetterReady() {
+  return '' +
+    '<div class="screen screen--paper">' +
+      statusBar() +
+      letterBar('home', LETTER.listTitle) +
+      '<div class="letter-body">' +
+        '<div class="letter-card letter-card--ready">' +
+          '<img class="avatar34" src="' + ASSET.letterAvatar + '" alt="">' +
+          '<span class="letter-card-t">' +
+            '<span class="nm">' + esc(LETTER.ready.title) + '</span>' +
+            '<span class="sub">' + esc(LETTER.ready.sub) + '</span>' +
+          '</span>' +
+          '<button class="open-btn" data-go="letter-preview">개봉<br>하기</button>' +
+        '</div>' +
+        openedListMarkup() +
+      '</div>' +
+      bottomNav('letter') +
+    '</div>';
+}
+
+/* ---------- 편지5 · 미리보기 ----------
+   Figma 1473px — 세로로 흐르게(스크롤) 처리 */
+function teaserLine(line) {
+  return esc(line).replace(/\[\[(.+?)\]\]/g, '<span class="masked">$1</span>');
+}
+
+function scLetterPreview() {
+  var body = LETTER_PREVIEW.body.map(esc).join('<br>');
+
+  var teaser = LETTER_TEASER.items.map(function (it) {
+    return '<div class="teaser-item">' +
+      '<p class="teaser-ch">' + esc(it.ch) + '</p>' +
+      '<p class="teaser-tx">' + it.lines.map(teaserLine).join('<br>') + '</p>' +
+    '</div>';
+  }).join('');
+
+  return '' +
+    '<div class="screen screen--paper">' +
+      statusBar() +
+      letterBar('letter-ready', LETTER_PREVIEW.headTitle, true) +
+      '<div class="letter-scroll">' +
+
+        '<div class="letter-hero">' +
+          '<div class="letter-speech">' +
+            '<img src="' + ASSET.letterSpeech + '" alt="">' +
+            '<span>' + esc(LETTER_PREVIEW.speech) + '</span>' +
+          '</div>' +
+          '<img class="letter-char" src="' + ASSET.charLetter + '" alt="">' +
+        '</div>' +
+
+        '<div class="letter-sheet">' +
+          '<p class="letter-to">' + esc(LETTER_PREVIEW.to) + '</p>' +
+          '<p class="letter-text">' + body + '</p>' +
+          '<p class="letter-from">' + esc(LETTER_PREVIEW.from) + '</p>' +
+        '</div>' +
+
+        '<div class="teaser">' +
+          '<div class="teaser-head">' +
+            '<p class="teaser-title">' + esc(LETTER_TEASER.title) + '</p>' +
+            '<p class="teaser-sub">' + LETTER_TEASER.sub.map(esc).join('<br>') + '</p>' +
+          '</div>' +
+          '<div class="teaser-card">' + teaser + '</div>' +
+          '<div class="teaser-btn">' +
+            '<button class="primary-btn">' + esc(LETTER_TEASER.cta) + '</button>' +
+            '<p class="teaser-note">' + esc(LETTER_TEASER.note) + '</p>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>' +
+    '</div>';
+}
 /* ---------- 라우팅 테이블 ---------- */
 var SCREENS = {
   'home':          scHome,
@@ -741,5 +879,10 @@ var SCREENS = {
   'my-charge-pay':   scMyChargePay,
   'my-history':      scMyHistory,
   'my-withdraw':     scMyWithdraw,
-  'my-bye':          scMyBye
+  'my-bye':          scMyBye,
+
+  'letter-empty':    scLetterEmpty,
+  'letter-list':     scLetterList,
+  'letter-ready':    scLetterReady,
+  'letter-preview':  scLetterPreview
 };

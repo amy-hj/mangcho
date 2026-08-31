@@ -766,3 +766,99 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .modal--pay .m-actions button,
 .modal--bye .m-actions button { height: 48px; padding: 12px 0; }
 .modal--bye .m-actions { gap: 0; }
+
+/* ============================================================
+   편지 (Figma 편지2~5)
+   ============================================================ */
+.bottomnav .tab .ico .fill-letter { left: 2.5px; top: 5.29px; width: 20px; height: 14.938px; }
+
+.appbar--letter { padding: 20px; justify-content: space-between; }
+.appbar--letter .share { width: 24px; height: 15px; flex: none; }
+.appbar--letter .share img { width: 100%; height: 100%; }
+.empty-state .art--sad { width: 136.18px; height: 176.19px; }
+
+.letter-body {
+  position: absolute; left: 0; right: 0; top: 108px; bottom: 77px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+  padding: 16px 20px 20px; overflow-y: auto; scrollbar-width: none;
+}
+.letter-body::-webkit-scrollbar { display: none; }
+.letter-section { width: 100%; padding: 10px; font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--text-primary); }
+
+.letter-card {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  background: var(--bg-white); border-radius: 12px; padding: 12px 16px;
+}
+.letter-card--writing { border: 1.5px solid #EDEDED; }
+.letter-card--ready   { border: 1.5px solid var(--text-secondary); padding: 12px; }
+.letter-card .thumb35 { width: 35px; height: 35px; flex: none; }
+.letter-card-t { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.letter-card-t .nm  { font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--text-primary); }
+.letter-card-t .sub { font-family: var(--font-body); font-weight: 300; font-size: 12px; color: var(--text-secondary); }
+.open-btn {
+  flex: none; width: 48px; padding: 10px; border-radius: 50px; background: #484848;
+  font-family: var(--font-body); font-weight: 500; font-size: 13px; line-height: 14px;
+  color: var(--bg-white); text-align: center; letter-spacing: .52px;
+}
+.open-btn:active { transform: scale(.96); }
+
+.letter-rows { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.letter-row {
+  width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  background: var(--bg-white); border: .5px solid var(--border-subtle); border-radius: 10px;
+}
+.letter-row .nm { font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--text-primary); }
+.letter-row--locked { background: var(--hairline); border-color: var(--text-secondary); }
+.lock-badge {
+  width: 34px; height: 34px; flex: none; border-radius: 17px;
+  background: var(--bg-white); border: .5px solid var(--border-subtle);
+  display: flex; align-items: center; justify-content: center;
+}
+.lock-badge img { width: 14.568px; height: 20.83px; }
+
+/* ---------- 편지5 미리보기 — 세로 스크롤 ---------- */
+.letter-scroll {
+  position: absolute; left: 0; right: 0; top: 108px; bottom: 0;
+  overflow-y: auto; scrollbar-width: none;
+}
+.letter-scroll::-webkit-scrollbar { display: none; }
+
+.letter-hero { position: relative; height: 234px; }
+.letter-speech { position: absolute; left: 112px; top: 8px; width: 151px; height: 46.05px; }
+.letter-speech img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.letter-speech span {
+  position: absolute; left: 0; right: 0; top: 12px; text-align: center;
+  font-family: var(--font-hand); font-size: 18px; color: var(--text-primary); white-space: nowrap;
+}
+.letter-char { position: absolute; left: 128px; top: 70px; width: 118px; height: 140px; }
+
+.letter-sheet {
+  margin: 0 20px; background: var(--bg-white);
+  border: 1px solid var(--border-subtle); border-radius: 12px;
+  padding: 20px 16px; display: flex; flex-direction: column; gap: 16px;
+}
+.letter-to   { font-family: var(--font-hand); font-size: 23px; color: var(--text-primary); }
+/* Figma 원문은 #6B6B6B 였으나 요청대로 본문을 --text-primary 로 */
+.letter-text { font-family: var(--font-body); font-size: 16px; line-height: 26px; color: var(--text-primary); }
+.letter-from { font-family: var(--font-hand); font-size: 19px; color: var(--text-primary); }
+
+/* 뒷장 미리보기 (노란 그라데이션) */
+.teaser {
+  margin-top: 20px; padding: 36px 0 48px;
+  background: linear-gradient(180deg, #FFD561 0%, #F5F5F5 100%);
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.teaser-head { width: 201px; display: flex; flex-direction: column; gap: 8px; text-align: center; color: var(--text-primary); }
+.teaser-title { font-family: var(--font-body); font-weight: 700; font-size: 22px; line-height: 1.5; }
+.teaser-sub   { font-family: var(--font-body); font-size: 14px; line-height: 21px; }
+.teaser-card {
+  width: 335px; background: var(--bg-white); border-radius: 12px;
+  padding: 24px 21px; display: flex; flex-direction: column; gap: 22px;
+}
+.teaser-item { display: flex; flex-direction: column; gap: 4px; }
+.teaser-ch { font-family: var(--font-body); font-weight: 700; font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+.teaser-tx { font-family: var(--font-body); font-size: 16px; line-height: 26px; color: var(--text-primary); }
+/* 결제 전 가려진 부분 — Figma 는 blur 3.5px */
+.masked { color: var(--text-secondary); filter: blur(3.5px); user-select: none; }
+.teaser-btn { width: 303px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.teaser-note { font-family: var(--font-body); font-weight: 300; font-size: 12px; color: var(--text-secondary); }

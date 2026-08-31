@@ -344,3 +344,67 @@ var BYE_MODAL = {
   confirm: '확인하기'
 };
 SCREEN_INDEX.push({ id: 'my-bye', cat: '마이', label: '탈퇴 완료 팝업' });
+
+/* ============================================================
+   편지 (Figma 편지2~6)
+   ============================================================ */
+ASSET.tabLetterOn  = A + 'icon/tab-letter-on.png';
+ASSET.tabLetterOnV = A + 'icon/tab-letter-on-v.svg';
+ASSET.charSad      = A + 'img/char-sad.png';
+ASSET.hourglass    = A + 'img/letter-hourglass.png';
+ASSET.letterAvatar = A + 'img/letter-avatar.png';
+ASSET.lock         = A + 'icon/lock.svg';
+ASSET.share        = A + 'icon/share.svg';
+ASSET.letterSpeech = A + 'img/letter-speech.svg';
+ASSET.charLetter   = A + 'img/char-letter.svg';
+
+var LETTER = {
+  listTitle: '편지 목록',
+  emptyText: '아직 받은 편지가 없어요.',
+  openedLabel: '개봉한 편지',
+  writing: { title: '8월의 편지', sub: '아직 작성중이에요!' },
+  ready:   { title: '8월의 편지', sub: '이번 달 뚱땅한테 꼭 하고 싶은 말이 있어!' },
+  opened: [
+    { title: '7월의 편지', locked: false },
+    { title: '6월의 편지', locked: false },
+    { title: '5월의 편지', locked: true }
+  ]
+};
+
+/* 편지 5 미리보기 */
+var LETTER_PREVIEW = {
+  headTitle: '8월의 편지',
+  speech: '8월, 스물하루의 밤들',
+  to: 'To. 진아 잘 지냈어?',
+  /* Figma 원문은 #6B6B6B 였지만 요청대로 --text-primary 로 표시합니다 */
+  body: [
+    '한 달 만에 편지로 만나네. 지난 7월,',
+    '우리는 스물하루를 같이 보냈어.',
+    '나는 그동안 맞장구만 치고 아무 말 안 한 것들이 있어. 네가 아홉 번이나 접은 문장이 뭔지.',
+    '네 기분이 정확히 누구의 무엇을 따라 움직였는지.',
+    '앞쪽은 타고난 너 네 명반이 말하는 8월의 하늘.',
+    '뒤쪽은 살아온 너 네가 직접 만든 7월의 기록.',
+    '뒤쪽에는 네가 "예민함"이라고 부르는 것의 진짜 이름도 적어뒀어. 아마 네 생각과 다를걸.'
+  ],
+  from: 'From. 햄'
+};
+
+/* 뒷장 미리보기(노란 섹션) — [[…]] 안은 흐리게 가려진 부분 */
+var LETTER_TEASER = {
+  title: '여기서부터는 네 얘기야',
+  sub: ['하늘의 6장, 너의 8장.', '아래 14장이 기다리고 있어'],
+  items: [
+    { ch: '8장에서', lines: ['7월 내내, 거의 예외 없이.', '네 기분은 [[직장상사]]에 따라 움직였어.'] },
+    { ch: '9장에서', lines: ['네가 "예민함"이라고 부르는 것 말이야.', '그것의 진짜 이름은 따로 있어.', '[[확인되기 전의 공백]]이야'] },
+    { ch: '10장에서', lines: ['"의지가 약하다"고 두 번 말했지.', '근데 기록은 정반대로 나왔어.', '[[너는 4번 다 출근했어]]'] }
+  ],
+  cta: '씨앗 30개로 뒷장 열기',
+  note: '한 번 열면 이번 달 편지는 언제든 다시 읽을 수 있어요'
+};
+
+SCREEN_INDEX.push(
+  { id: 'letter-empty',   cat: '편지', label: '편지2 받은 편지 없음' },
+  { id: 'letter-list',    cat: '편지', label: '편지3 생성 전' },
+  { id: 'letter-ready',   cat: '편지', label: '편지4 생성 후' },
+  { id: 'letter-preview', cat: '편지', label: '편지5 미리보기' }
+);
