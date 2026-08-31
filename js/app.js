@@ -58,6 +58,10 @@ function initialState() {
     withdrawChecked: false,
     payIndex:        0,
 
+    /* 온보딩 */
+    onbName:   '',
+    onbTopics: [],
+
     /* 편지 목차 아코디언 */
     openChapters: []
   };
@@ -232,6 +236,28 @@ viewport.addEventListener('click', function (e) {
     return;
   }
 
+  /* 온보딩 6: 햄찌 카드 고르기 (입력한 이름은 그대로 둡니다) */
+  el = e.target.closest('[data-onbchar]');
+  if (el) {
+    var nameEl = viewport.querySelector('#onb-name');
+    if (nameEl) state.onbName = nameEl.value;
+    state.charId = el.dataset.onbchar;
+    save();
+    render(state.current, { replace: true });
+    return;
+  }
+
+  /* 온보딩 8: 주 고민 칩 (여러 개 고를 수 있습니다) */
+  el = e.target.closest('[data-topic]');
+  if (el) {
+    var tp = el.dataset.topic;
+    var ti = state.onbTopics.indexOf(tp);
+    if (ti === -1) state.onbTopics.push(tp);
+    else state.onbTopics.splice(ti, 1);
+    render(state.current, { replace: true });
+    return;
+  }
+
   el = e.target.closest('[data-room]');
   if (el) { openRoom(el.dataset.room); return; }
 
@@ -346,6 +372,7 @@ viewport.addEventListener('keydown', function (e) {
     pushMessage(e.target.value, activeBucket());
     e.target.value = '';
   }
+
   if (e.target.id === 'rename-input') {
     var btn = viewport.querySelector('#btn-rename');
     if (btn) btn.click();
@@ -364,6 +391,8 @@ viewport.addEventListener('change', function (e) {
 });
 
 viewport.addEventListener('input', function (e) {
+  if (e.target.id === 'onb-name') { state.onbName = e.target.value; return; }
+
   if (e.target.id === 'rename-input') {
     var c = viewport.querySelector('#rename-count');
     if (c) c.textContent = e.target.value.length + '/50';
@@ -399,6 +428,7 @@ function jump(id) {
     state.draft = (id === 'chat') ? ONGOING_DRAFT : '';
   }
   if (id === 'letter-opened') state.openChapters = [];
+  if (id.indexOf('onb-') === 0) { state.onbName = ''; state.onbTopics = []; }
   if (id.indexOf('my') === 0) {
     state.form = Object.assign({}, PROFILE_FORM);
     if (id === 'my-withdraw' || id === 'my-bye') state.withdrawChecked = (id === 'my-bye');

@@ -1169,3 +1169,145 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .onb-lbox .t { font-family: var(--font-body); font-weight: 600; font-size: 15px; line-height: 1.5; color: var(--text-primary); }
 .onb-lbox .d { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
+
+/* ============================================================
+   온보딩 5~9 (로그인 · 햄찌 고르기 · 정보 · 주 고민 · 동의)
+   ============================================================ */
+
+/* Ownglyph 27 대제목 (온보딩 6·7·8 공용) */
+.onb-h1 {
+  width: 100%; font-family: var(--font-hand); font-size: 27px;
+  color: var(--text-primary); text-align: center;
+}
+.onb-h1--left { position: absolute; left: 20px; top: 64px; width: 320px; text-align: left; }
+
+/* 화면 아래 고정 CTA (Figma top 710) */
+.onb-cta { position: absolute; left: 20px; right: 20px; top: 710px; }
+
+/* ---------- 온보딩 5 로그인 ---------- */
+.login-body {
+  position: absolute; left: 1px; top: 44px; width: 373px; height: 734px; padding: 20px;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+}
+.login-top { width: 100%; display: flex; flex-direction: column; gap: 40px; }
+.login-brand {
+  width: 100%; height: 26px; text-align: center;
+  font-family: var(--font-body); font-weight: 800; font-size: 25.96px;
+  letter-spacing: -.2596px; color: var(--text-primary);
+}
+.login-copy { display: flex; flex-direction: column; gap: 12px; }
+.login-title {
+  font-family: var(--font-body); font-weight: 700; font-size: 32px; line-height: 1.4;
+  color: var(--text-primary); white-space: nowrap;
+}
+.login-sub {
+  font-family: var(--font-body); font-size: 18px; line-height: 1.4;
+  color: var(--text-secondary); white-space: nowrap;
+}
+.login-btns { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.login-btn {
+  width: 100%; height: 48px; flex: none; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--bg-white);
+  font-family: var(--font-body); font-size: 16px; color: var(--text-primary);
+}
+.login-btn img { width: 18px; height: 18px; flex: none; }
+.login-btn:active { transform: scale(.99); }
+.login-btn--naver { background: #03C75A; color: var(--bg-white); }
+.login-btn--kakao { background: #FEE500; }
+.login-btn--apple { background: var(--text-primary); color: var(--bg-white); }
+
+/* ---------- 온보딩 6 햄찌 고르기 ---------- */
+.opick-body {
+  position: absolute; left: 0; right: 0; top: 44px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 20px;
+  padding: 100px 20px 0;
+}
+.opick-desc {
+  width: 100%; text-align: center;
+  font-family: var(--font-body); font-size: 15px; line-height: 22px; color: var(--text-secondary);
+}
+.opick-row { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.opick-card {
+  flex: 1 0 0; min-width: 0; max-width: 300px; padding: 10px;
+  background: var(--bg-white); border: .5px solid var(--border-subtle); border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.opick-card.on { border-color: var(--text-primary); }
+.opick-card img { width: 96px; height: 111px; flex: none; object-fit: cover; }
+.opick-card .nm {
+  width: 100%; text-align: center;
+  font-family: var(--font-hand); font-size: 20px; color: var(--text-primary);
+}
+.opick-card .ds {
+  width: 100%; text-align: center;
+  font-family: var(--font-hand); font-size: 14px; color: var(--text-secondary);
+}
+.opick-name { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.opick-input {
+  width: 100%; height: 48px; padding: 16px 10px;
+  background: var(--bg-white); border: .5px solid var(--border-subtle); border-radius: 12px;
+  font-family: var(--font-body); font-size: 15px; color: var(--text-primary); outline: none;
+}
+.opick-input::placeholder { color: var(--text-disabled); }
+.opick-hint {
+  width: 100%; text-align: right;
+  font-family: var(--font-body); font-size: 13px; color: var(--text-secondary);
+}
+.opick-foot { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 20px 54px; }
+
+/* ---------- 온보딩 7 사용자 정보 (마이 06-1 폼 재사용) ---------- */
+.edit-body--onb { bottom: 102px; justify-content: flex-start; }
+
+/* ---------- 온보딩 8 주 고민 고르기 ---------- */
+.topic-body {
+  position: absolute; left: 0; right: 0; top: 199px; padding: 0 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.topic-desc {
+  width: 320px; text-align: center;
+  font-family: var(--font-body); font-size: 15px; color: var(--text-secondary);
+}
+.topic-rows { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.topic-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.topic-chip {
+  height: 46px; flex: none; padding: 10px 20px; border-radius: 500px;
+  background: var(--bg-white); border: 1px solid var(--border-subtle);
+  display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap;
+}
+.topic-chip .e { font-family: var(--font-hand); font-size: 14px; }
+.topic-chip .t { font-family: var(--font-body); font-size: 15px; color: var(--text-primary); }
+.topic-chip.on { border-color: var(--accent-primary); background: #FFF6DE; }
+.topic-chip:active { transform: scale(.98); }
+
+/* ---------- 온보딩 9 AI 데이터 전송 동의 팝업 ---------- */
+.modal--consent {
+  left: 20px; right: 20px; top: 50%; transform: translateY(-50%);
+  width: auto; border-radius: 10px; padding: 20px;
+  align-items: flex-start; gap: 30px;
+}
+.consent-head { width: 100%; display: flex; flex-direction: column; gap: 11px; }
+.consent-head .t {
+  width: 100%; font-family: var(--font-body); font-weight: 600; font-size: 22px;
+  color: var(--text-primary);
+}
+.consent-head .d {
+  width: 100%; font-family: var(--font-body); font-size: 13px; color: var(--text-secondary);
+}
+.consent-rows { width: 100%; display: flex; flex-direction: column; gap: 15px; }
+.consent-row { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.consent-row .k {
+  width: 100%; font-family: var(--font-body); font-weight: 600; font-size: 15px;
+  color: var(--text-primary);
+}
+.consent-row .v {
+  width: 100%; font-family: var(--font-body); font-size: 15px; color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+.consent-btns { width: 100%; display: flex; flex-direction: column; gap: 7px; }
+.subtle-btn {
+  width: 100%; height: 48px; flex: none; border-radius: 10px;
+  background: var(--button-subtle); color: var(--text-inverse);
+  font-family: var(--font-body); font-weight: 600; font-size: 16px;
+}
+.subtle-btn:active { transform: scale(.99); }

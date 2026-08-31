@@ -498,7 +498,8 @@ function scMy(state) {
 }
 
 /* ---------- 06-1 회원정보 수정 ---------- */
-function editFormMarkup(state) {
+/* 회원정보 폼 — 마이 06-1 과 온보딩 7 이 함께 씁니다 */
+function profileFields(state, extra) {
   var f = state.form;
   var num = function (val, unit) {
     return '<span class="num-field">' +
@@ -507,34 +508,39 @@ function editFormMarkup(state) {
     '</span>';
   };
   return '' +
-    '<div class="edit-body">' +
-      '<div class="edit-fields">' +
-        '<div class="field"><p class="field-label">이름</p>' +
-          '<div class="text-box">' + esc(f.name) + '</div></div>' +
+    '<div class="edit-fields">' +
+      '<div class="field"><p class="field-label">이름</p>' +
+        '<div class="text-box">' + esc(f.name) + '</div></div>' +
 
-        '<div class="field"><p class="field-label">생년월일</p>' +
-          '<div class="num-row">' + num(f.year, '년') + num(f.month, '월') + num(f.day, '일') + '</div>' +
-        '</div>' +
-
-        '<div class="field"><p class="field-label">태어난 시간</p>' +
-          '<div class="num-row num-row--2">' + num(f.hour, '시') + num(f.minute, '분') + '</div>' +
-          '<label class="chk chk--sm"><input type="checkbox" id="chk-unknown-time"' + (f.unknownTime ? ' checked' : '') + '>' +
-            '<span class="box"></span><span class="txt">태어난 시간을 모르겠어!</span></label>' +
-        '</div>' +
-
-        '<div class="field"><p class="field-label">출생지역 </p>' +
-          '<div class="text-box">' + esc(f.region) + '</div></div>' +
-
-        '<div class="field"><p class="field-label">성별</p>' +
-          '<div class="gender-row">' +
-            ['남성', '여성'].map(function (g) {
-              return '<button class="gender' + (f.gender === g ? ' on' : '') + '" data-gender="' + g + '">' + g + '</button>';
-            }).join('') +
-          '</div>' +
-        '</div>' +
-
-        '<div class="edit-quit"><button class="link-btn" data-go="my-withdraw">회원탈퇴하기</button></div>' +
+      '<div class="field"><p class="field-label">생년월일</p>' +
+        '<div class="num-row">' + num(f.year, '년') + num(f.month, '월') + num(f.day, '일') + '</div>' +
       '</div>' +
+
+      '<div class="field"><p class="field-label">태어난 시간</p>' +
+        '<div class="num-row num-row--2">' + num(f.hour, '시') + num(f.minute, '분') + '</div>' +
+        '<label class="chk chk--sm"><input type="checkbox" id="chk-unknown-time"' + (f.unknownTime ? ' checked' : '') + '>' +
+          '<span class="box"></span><span class="txt">태어난 시간을 모르겠어!</span></label>' +
+      '</div>' +
+
+      '<div class="field"><p class="field-label">출생지역 </p>' +
+        '<div class="text-box">' + esc(f.region) + '</div></div>' +
+
+      '<div class="field"><p class="field-label">성별</p>' +
+        '<div class="gender-row">' +
+          ['남성', '여성'].map(function (g) {
+            return '<button class="gender' + (f.gender === g ? ' on' : '') + '" data-gender="' + g + '">' + g + '</button>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      (extra || '') +
+    '</div>';
+}
+
+function editFormMarkup(state) {
+  return '' +
+    '<div class="edit-body">' +
+      profileFields(state,
+        '<div class="edit-quit"><button class="link-btn" data-go="my-withdraw">회원탈퇴하기</button></div>') +
       '<button class="primary-btn" data-go="my-edit-confirm">저장하기</button>' +
     '</div>';
 }
@@ -1178,6 +1184,133 @@ function scOnboarding(state, idx) {
       '</div>' +
     '</div>';
 }
+
+/* ---------- 온보딩 5 로그인 ---------- */
+function scOnbLogin() {
+  var btns = LOGIN.buttons.map(function (b) {
+    return '<button class="login-btn login-btn--' + b.id + '" data-go="onb-pick">' +
+      '<img src="' + b.icon + '" alt="">' +
+      '<span>' + esc(b.label) + '</span>' +
+    '</button>';
+  }).join('');
+
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() +
+      '<div class="login-body">' +
+        '<div class="login-top">' +
+          '<p class="login-brand">' + esc(LOGIN.brand) + '</p>' +
+          '<div class="login-copy">' +
+            '<p class="login-title">' + esc(LOGIN.title) + '</p>' +
+            '<p class="login-sub">' + LOGIN.sub.map(esc).join('<br>') + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="login-btns">' + btns + '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 온보딩 6 햄찌 고르기 & 이름 정하기 ---------- */
+function scOnbPick(state) {
+  var cards = CHARACTERS.map(function (c) {
+    return '<button class="opick-card' + (state.charId === c.id ? ' on' : '') + '" data-onbchar="' + c.id + '">' +
+      '<img src="' + c.card + '" alt="">' +
+      '<span class="nm">' + esc(c.name) + '</span>' +
+      '<span class="ds">' + esc(c.desc) + '</span>' +
+    '</button>';
+  }).join('');
+
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() +
+      '<div class="opick-body">' +
+        '<p class="onb-h1">' + esc(ONB_PICK.title) + '</p>' +
+        '<p class="opick-desc">' + ONB_PICK.desc.map(esc).join('<br>') + '</p>' +
+        '<div class="opick-row">' + cards + '</div>' +
+        '<div class="opick-name">' +
+          '<input id="onb-name" class="opick-input" type="text" maxlength="10"' +
+            ' placeholder="' + esc(ONB_PICK.placeholder) + '"' +
+            ' value="' + esc(state.onbName || '') + '">' +
+          '<p class="opick-hint">' + esc(ONB_PICK.hint) + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="opick-foot">' +
+        '<button class="primary-btn" data-go="onb-profile">' + esc(ONB_PICK.cta) + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 온보딩 7 사용자 정보받기 ---------- */
+function scOnbProfile(state) {
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() +
+      '<p class="onb-h1 onb-h1--left">' + esc(ONB_PROFILE.title) + '</p>' +
+      '<div class="edit-body edit-body--onb">' + profileFields(state) + '</div>' +
+      '<div class="onb-cta">' +
+        '<button class="primary-btn" data-go="onb-topic">' + esc(ONB_PROFILE.cta) + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 온보딩 8 주 고민 고르기 ---------- */
+function topicBody(state) {
+  var picked = state.onbTopics || [];
+  var rows = ONB_TOPIC.rows.map(function (r) {
+    return '<div class="topic-row">' + r.map(function (c) {
+      var on = picked.indexOf(c.t) !== -1;
+      return '<button class="topic-chip' + (on ? ' on' : '') + '"' +
+        ' data-topic="' + esc(c.t) + '" style="width:' + c.w + 'px">' +
+        '<span class="e">' + c.e + '</span>' +
+        '<span class="t">' + esc(c.t) + '</span>' +
+      '</button>';
+    }).join('') + '</div>';
+  }).join('');
+
+  return '' +
+    '<div class="topic-body">' +
+      '<p class="onb-h1">' + esc(ONB_TOPIC.title) + '</p>' +
+      '<p class="topic-desc">' + ONB_TOPIC.desc.map(esc).join('<br>') + '</p>' +
+      '<div class="topic-rows">' + rows + '</div>' +
+    '</div>';
+}
+
+function scOnbTopic(state) {
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() + topicBody(state) +
+      '<div class="onb-cta">' +
+        '<button class="primary-btn" data-go="onb-consent">' + esc(ONB_TOPIC.cta) + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 온보딩 9 AI 데이터 전송 동의 팝업 ---------- */
+function scOnbConsent(state) {
+  var C = ONB_CONSENT;
+  var rows = C.rows.map(function (r) {
+    return '<div class="consent-row">' +
+      '<p class="k">' + esc(r.k) + '</p>' +
+      '<p class="v">' + r.v.map(esc).join('<br>') + '</p>' +
+    '</div>';
+  }).join('');
+
+  return '' +
+    '<div class="screen screen--paper">' + statusBar() + topicBody(state) +
+      '<div class="onb-cta">' +
+        '<button class="primary-btn">' + esc(ONB_TOPIC.cta) + '</button>' +
+      '</div>' +
+      '<div class="dim dim--soft" data-go="onb-topic"></div>' +
+      '<div class="modal modal--consent">' +
+        '<div class="consent-head">' +
+          '<p class="t">' + esc(C.title) + '</p>' +
+          '<p class="d">' + esc(C.lead) + '</p>' +
+        '</div>' +
+        '<div class="consent-rows">' + rows + '</div>' +
+        '<div class="consent-btns">' +
+          '<button class="primary-btn" data-go="home">' + esc(C.ok) + '</button>' +
+          '<button class="subtle-btn" data-go="onb-topic">' + esc(C.no) + '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
 /* ---------- 라우팅 테이블 ---------- */
 var SCREENS = {
   'home':          scHome,
@@ -1215,5 +1348,11 @@ var SCREENS = {
   'onb-1': function (s) { return scOnboarding(s, 0); },
   'onb-2': function (s) { return scOnboarding(s, 1); },
   'onb-3': function (s) { return scOnboarding(s, 2); },
-  'onb-4': function (s) { return scOnboarding(s, 3); }
+  'onb-4': function (s) { return scOnboarding(s, 3); },
+
+  'onb-login':   scOnbLogin,
+  'onb-pick':    scOnbPick,
+  'onb-profile': scOnbProfile,
+  'onb-topic':   scOnbTopic,
+  'onb-consent': scOnbConsent
 };

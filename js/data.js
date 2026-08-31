@@ -733,6 +733,7 @@ var ONBOARDING = [
 ];
 
 var ONB_SKIP = '건너뛰기';
+var ONB_LABELS = ['왜 필요한지', '캐릭터 소개', '편지 소개', '시작 안내'];
 
 /* 온보딩 3 의 편지 미리보기 일러스트 */
 var ONB_LETTER_ART = {
@@ -744,5 +745,73 @@ var ONB_LETTER_ART = {
 };
 
 ONBOARDING.forEach(function (o, i) {
-  SCREEN_INDEX.push({ id: o.id, cat: '온보딩', label: '온보딩 ' + (i + 1) });
+  SCREEN_INDEX.push({ id: o.id, cat: '온보딩', label: (i + 1) + ' ' + ONB_LABELS[i] });
 });
+
+/* ---------- 온보딩 5 로그인 (Figma 775:4401) ---------- */
+ASSET.logoGoogle   = A + 'icon/login-google.svg';
+ASSET.logoFacebook = A + 'icon/login-facebook.svg';
+ASSET.logoNaver    = A + 'icon/login-naver.svg';
+ASSET.logoKakao    = A + 'icon/login-kakao.svg';
+ASSET.logoApple    = A + 'icon/login-apple.svg';
+
+var LOGIN = {
+  brand: 'melangcoach',
+  title: '멜랑코치',
+  sub: ['대화와 명반으로', '더욱 깊게 알아가는 나'],
+  buttons: [
+    { id: 'google',   icon: ASSET.logoGoogle,   label: '구글 계정으로 로그인' },
+    { id: 'facebook', icon: ASSET.logoFacebook, label: '페이스북으로 로그인' },
+    { id: 'naver',    icon: ASSET.logoNaver,    label: '네이버로 로그인' },
+    { id: 'kakao',    icon: ASSET.logoKakao,    label: '카카오톡으로 로그인' },
+    { id: 'apple',    icon: ASSET.logoApple,    label: 'Apple로 로그인' }
+  ]
+};
+
+/* ---------- 온보딩 6 햄찌 고르기 (Figma 964:3200) ---------- */
+var ONB_PICK = {
+  title: '누구랑 시작할래?',
+  desc: ['메인화면에서 함께할 친구를 골라주세요!', '대화는 누구랑도 가능해요!'],
+  placeholder: '이름도 지어줘!',
+  hint: '이름은 나중에 마이페이지에서 바꿀 수 있어',
+  cta: '선택 완료 '
+};
+
+/* ---------- 온보딩 7 사용자 정보받기 (Figma 775:4435) ---------- */
+var ONB_PROFILE = { title: '너에 대해 알고싶어!', cta: '다음으로' };
+
+/* ---------- 온보딩 8 관심사(주 고민) (Figma 775:4485) ---------- */
+var ONB_TOPIC = {
+  title: '나와 어떤 대화가 하고싶어?',
+  desc: ['어떤 고민이 있는지, 뭐가 제일 궁금한지', '나에게 알려줘!', '바로 그 주제로 대화해보자~'],
+  cta: '시작하기',
+  rows: [
+    [{ e: '🙌', t: '인간관계', w: 118 }, { e: '💼', t: '일·직장', w: 108 }, { e: '👪', t: '가족', w: 90 }],
+    [{ e: '💰', t: '재테크', w: 122 }, { e: '💍', t: '연애·결혼', w: 122 }],
+    [{ e: '💊', t: '건강', w: 90 }, { e: '😰', t: '불안·스트레스', w: 150 }],
+    [{ e: '💭', t: '다른 문제', w: 126 }]
+  ]
+};
+
+/* ---------- 온보딩 9 AI 데이터 전송 동의 (Figma 775:4509) ---------- */
+var ONB_CONSENT = {
+  title: 'AI 데이터 전송 동의',
+  lead: 'AI 대화를 사용하기 전에 아래 데이터 전송 내용을 확인하고 동의해주세요.',
+  rows: [
+    { k: 'AI 제공자',  v: ['OpenAI / Anthropic / Google Gemini'] },
+    { k: '전송 데이터', v: [' - 대화 텍스트 및 생성 응답', ' - 입력한 프로필 정보 (닉네임, 선호 설정)'] },
+    { k: '전송 목적',  v: ['실시간 AI 응답 생성',
+                          '전송 데이터는 실시간 응답 생성에만 사용되며 외부에',
+                          '저장되지 않아요.'] }
+  ],
+  ok: '동의하고 계속하기',
+  no: '동의하지 않음'
+};
+
+SCREEN_INDEX.push(
+  { id: 'onb-login',   cat: '온보딩', label: '5 로그인' },
+  { id: 'onb-pick',    cat: '온보딩', label: '6 햄찌 고르기' },
+  { id: 'onb-profile', cat: '온보딩', label: '7 사용자 정보' },
+  { id: 'onb-topic',   cat: '온보딩', label: '8 주 고민 고르기' },
+  { id: 'onb-consent', cat: '온보딩', label: '9 데이터 전송 동의' }
+);
