@@ -1186,7 +1186,7 @@ function scOnboarding(state, idx) {
   }).join('');
 
   return '' +
-    '<div class="screen screen--paper">' +
+    '<div class="screen screen--paper">' + statusBar() +
       '<button class="onb-skip" data-go="onb-login">' + esc(ONB_SKIP) + '</button>' +
       onbArt(o) +
       '<div class="onb-copy">' +
