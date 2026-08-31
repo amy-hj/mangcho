@@ -59,7 +59,7 @@ function initialState() {
     payIndex:        0,
 
     /* 편지 목차 아코디언 */
-    openChapter: null
+    openChapters: []
   };
   return s;
 }
@@ -261,10 +261,26 @@ viewport.addEventListener('click', function (e) {
   el = e.target.closest('[data-chapter]');
   if (el) {
     var ch = el.dataset.chapter;
-    state.openChapter = (state.openChapter === ch) ? null : ch;
+
+    /* 다시 그려도 누른 줄이 화면에서 제자리에 있도록 좌표를 기억해둡니다.
+       (특히 닫을 때, 위쪽 내용이 줄어들며 화면이 튀는 걸 막아줍니다) */
+    var scroller = viewport.querySelector('.letter-scroll');
+    var beforeTop = el.getBoundingClientRect().top;
+    var beforeScroll = scroller ? scroller.scrollTop : 0;
+
+    /* 다른 장을 열어도 이미 열린 장은 그대로 둡니다 */
+    var i = state.openChapters.indexOf(ch);
+    if (i === -1) state.openChapters.push(ch);
+    else state.openChapters.splice(i, 1);
+
     render(state.current, { replace: true });
-    var open = viewport.querySelector('.toc-block.is-open');
-    if (open) open.scrollIntoView({ block: 'nearest' });
+
+    var sc2 = viewport.querySelector('.letter-scroll');
+    var row2 = viewport.querySelector('[data-chapter="' + ch + '"]');
+    if (sc2 && row2) {
+      sc2.scrollTop = beforeScroll;
+      sc2.scrollTop = beforeScroll + (row2.getBoundingClientRect().top - beforeTop);
+    }
     return;
   }
 
@@ -375,7 +391,7 @@ function jump(id) {
     state.roomName = ONGOING_ROOM_NAME;
     state.draft = (id === 'chat') ? ONGOING_DRAFT : '';
   }
-  if (id === 'letter-opened') state.openChapter = null;
+  if (id === 'letter-opened') state.openChapters = [];
   if (id.indexOf('my') === 0) {
     state.form = Object.assign({}, PROFILE_FORM);
     if (id === 'my-withdraw' || id === 'my-bye') state.withdrawChecked = (id === 'my-bye');

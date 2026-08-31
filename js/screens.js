@@ -988,10 +988,11 @@ function chapterBlocks(id) {
 }
 
 /* ---------- 목차 아코디언 (편지6 · 1부 · 2부 공용) ---------- */
-function tocAccordion(openId) {
+function tocAccordion(openIds) {
+  openIds = openIds || [];
   return LETTER_TOC.parts.map(function (p) {
     var rows = p.items.map(function (it) {
-      var open = it.id === openId;
+      var open = openIds.indexOf(it.id) !== -1;
       return '<div class="toc-block' + (open ? ' is-open' : '') + '">' +
         '<button class="toc-row" data-chapter="' + it.id + '">' +
           '<span class="toc-t">' +
@@ -1042,7 +1043,7 @@ function scLetterOpened(state) {
     return '<button class="toc-tab' + (i === 0 ? ' on' : '') + '">' + esc(t) + '</button>';
   }).join('');
 
-  var parts = tocAccordion(state.openChapter);
+  var parts = tocAccordion(state.openChapters);
 
   return '' +
     '<div class="screen screen--paper">' +
