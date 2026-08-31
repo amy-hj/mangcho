@@ -862,3 +862,47 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .masked { color: var(--text-secondary); filter: blur(3.5px); user-select: none; }
 .teaser-btn { width: 303px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .teaser-note { font-family: var(--font-body); font-weight: 300; font-size: 12px; color: var(--text-secondary); }
+
+/* ---------- 편지6 · 목차 ---------- */
+.teaser--opened { padding-bottom: 28px; }
+.toc { padding: 0 20px 20px; display: flex; flex-direction: column; }
+.toc-tabs {
+  display: flex; gap: 18px; padding: 14px 0; overflow-x: auto;
+  border-bottom: 1px solid var(--hairline); scrollbar-width: none;
+}
+.toc-tabs::-webkit-scrollbar { display: none; }
+.toc-tab {
+  flex: none; padding-bottom: 8px; white-space: nowrap;
+  font-family: var(--font-body); font-size: 16px; color: var(--text-primary);
+}
+.toc-tab.on { font-weight: 600; border-bottom: 2px solid var(--text-primary); }
+
+.toc-part {
+  margin-top: 20px; padding: 10px 14px; border-radius: 8px;
+  background: var(--accent-primary); color: var(--text-primary);
+  font-family: var(--font-body); font-weight: 700; font-size: 16px;
+}
+.toc-rows { display: flex; flex-direction: column; }
+.toc-row {
+  width: 100%; display: flex; align-items: flex-start; gap: 10px;
+  padding: 14px 4px; border-bottom: 1px solid var(--hairline); text-align: left;
+}
+.toc-row:hover { background: #FCFCFC; }
+.toc-t { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.toc-h {
+  font-family: var(--font-body); font-weight: 600; font-size: 16px;
+  color: var(--text-primary); line-height: 1.4;
+}
+.toc-h .emo { font-style: normal; margin-right: 4px; }
+.toc-h .bar { margin: 0 6px; font-weight: 400; color: var(--text-disabled); }
+.toc-s { font-family: var(--font-body); font-size: 13px; color: var(--text-secondary); }
+.toc-chev { flex: none; color: var(--text-disabled); font-size: 16px; line-height: 1.4; }
+
+.letter-foot {
+  display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 0 32px;
+}
+.letter-foot .dday {
+  padding: 10px 22px; border-radius: 50px; background: var(--accent-primary);
+  font-family: var(--font-hand); font-size: 18px; color: var(--text-primary);
+}
+.letter-foot .foot-char { width: 96px; height: 114px; }

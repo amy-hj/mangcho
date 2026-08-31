@@ -845,11 +845,83 @@ function scLetterPreview() {
           '</div>' +
           '<div class="teaser-card">' + teaser + '</div>' +
           '<div class="teaser-btn">' +
-            '<button class="primary-btn">' + esc(LETTER_TEASER.cta) + '</button>' +
+            '<button class="primary-btn" data-go="letter-opened">' + esc(LETTER_TEASER.cta) + '</button>' +
             '<p class="teaser-note">' + esc(LETTER_TEASER.note) + '</p>' +
           '</div>' +
         '</div>' +
 
+      '</div>' +
+    '</div>';
+}
+
+/* ---------- 편지6 · 결제 후 (목차) ---------- */
+function letterSheetMarkup() {
+  return '' +
+    '<div class="letter-hero">' +
+      '<div class="letter-speech">' +
+        '<img src="' + ASSET.letterSpeech + '" alt="">' +
+        '<span>' + esc(LETTER_PREVIEW.speech) + '</span>' +
+      '</div>' +
+      '<img class="letter-char" src="' + ASSET.charLetter + '" alt="">' +
+    '</div>' +
+    '<div class="letter-sheet">' +
+      '<p class="letter-to">' + esc(LETTER_PREVIEW.to) + '</p>' +
+      '<p class="letter-text">' + LETTER_PREVIEW.body.map(esc).join('<br>') + '</p>' +
+      '<p class="letter-from">' + esc(LETTER_PREVIEW.from) + '</p>' +
+    '</div>';
+}
+
+function scLetterOpened() {
+  /* 결제 후이므로 가림(blur) 없이 그대로 보여줍니다 */
+  var teaser = LETTER_TEASER.items.map(function (it) {
+    return '<div class="teaser-item">' +
+      '<p class="teaser-ch">' + esc(it.ch) + '</p>' +
+      '<p class="teaser-tx">' + it.lines.map(function (l) {
+        return esc(l).replace(/\[\[(.+?)\]\]/g, '$1');
+      }).join('<br>') + '</p>' +
+    '</div>';
+  }).join('');
+
+  var tabs = LETTER_TOC.tabs.map(function (t, i) {
+    return '<button class="toc-tab' + (i === 0 ? ' on' : '') + '">' + esc(t) + '</button>';
+  }).join('');
+
+  var parts = LETTER_TOC.parts.map(function (p) {
+    var rows = p.items.map(function (it) {
+      return '<button class="toc-row" data-go="' + it.id + '">' +
+        '<span class="toc-t">' +
+          '<span class="toc-h"><em class="emo">' + it.emoji + '</em>' +
+            '<b>' + esc(it.name) + '</b><span class="bar">|</span>' + esc(it.tail) + '</span>' +
+          '<span class="toc-s">' + esc(it.sub) + '</span>' +
+        '</span>' +
+        '<span class="toc-chev">⌄</span>' +
+      '</button>';
+    }).join('');
+    return '<p class="toc-part">' + esc(p.label) + '</p>' +
+           '<div class="toc-rows">' + rows + '</div>';
+  }).join('');
+
+  return '' +
+    '<div class="screen screen--paper">' +
+      statusBar() +
+      letterBar('letter-ready', LETTER_PREVIEW.headTitle, true) +
+      '<div class="letter-scroll">' +
+        letterSheetMarkup() +
+        '<div class="teaser teaser--opened">' +
+          '<div class="teaser-head">' +
+            '<p class="teaser-title">' + esc(LETTER_TEASER.title) + '</p>' +
+            '<p class="teaser-sub">' + LETTER_TEASER.sub.map(esc).join('<br>') + '</p>' +
+          '</div>' +
+          '<div class="teaser-card">' + teaser + '</div>' +
+        '</div>' +
+        '<div class="toc">' +
+          '<div class="toc-tabs">' + tabs + '</div>' +
+          parts +
+        '</div>' +
+        '<div class="letter-foot">' +
+          '<span class="dday">' + esc(LETTER_TOC.dday) + '</span>' +
+          '<img class="foot-char" src="' + ASSET.charLetter + '" alt="">' +
+        '</div>' +
       '</div>' +
     '</div>';
 }
@@ -884,5 +956,6 @@ var SCREENS = {
   'letter-empty':    scLetterEmpty,
   'letter-list':     scLetterList,
   'letter-ready':    scLetterReady,
-  'letter-preview':  scLetterPreview
+  'letter-preview':  scLetterPreview,
+  'letter-opened':   scLetterOpened
 };
