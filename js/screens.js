@@ -886,6 +886,43 @@ function chapterBlocks(id) {
         '<div class="ch-text">' + paras + '</div>' +
       '</section>';
     }
+    if (b.type === 'flow') {
+      var fsteps = b.steps.map(function (s, i) {
+        return (i ? '<p class="ch-arrow">↓</p>' : '') +
+          '<div class="ch-flowbox">' + s.lines.map(esc).join('<br>') + '</div>';
+      }).join('');
+      return '<section class="ch-sec ch-flow">' +
+        '<p class="ch-label ch-label--dark">' + esc(b.label) + '</p>' +
+        '<div class="ch-steps">' + fsteps + '</div>' +
+      '</section>';
+    }
+    if (b.type === 'note') {
+      return '<section class="ch-sec ch-note">' +
+        '<span class="ch-badge">' + esc(b.badge) + '</span>' +
+        (b.before ? '<div class="ch-text">' + b.before.map(function (p) {
+          return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>'; }).join('') + '</div>' : '') +
+        '<div class="ch-notelist">' + b.items.map(function (q) {
+          return '<div class="ch-quoteline">' +
+            '<span class="t">' + esc(q.t).replace(/\n/g, '<br>') + '</span>' +
+            (q.d ? '<span class="d">' + esc(q.d) + '</span>' : '') +
+          '</div>';
+        }).join('') + '</div>' +
+        (b.after ? '<div class="ch-text">' + b.after.map(function (p) {
+          return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>'; }).join('') + '</div>' : '') +
+      '</section>';
+    }
+    if (b.type === 'letter') {
+      return '<section class="ch-sec ch-endletter">' +
+        '<p class="ch-hello">' + esc(b.hello) + '</p>' +
+        '<div class="ch-endtext">' + b.paras.map(function (p) {
+          return '<p>' + esc(p) + '</p>'; }).join('') + '</div>' +
+        '<p class="ch-from">' + esc(b.from) + '</p>' +
+        '<div class="ch-endbtn">' +
+          '<button class="primary-btn" data-go="chat-list">' + esc(b.cta) + '</button>' +
+          '<p class="teaser-note">' + esc(b.note) + '</p>' +
+        '</div>' +
+      '</section>';
+    }
     if (b.type === 'quotes') {
       return '<section class="ch-sec ch-quotes">' +
         '<p class="ch-label ch-label--dark">' + esc(b.label) + '</p>' +
