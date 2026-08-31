@@ -1106,6 +1106,78 @@ function scLetterOpened(state) {
       '</div>' +
     '</div>';
 }
+
+/* ============================================================
+   온보딩 (Figma 온보딩 1~4)
+   ============================================================ */
+function onbArt(o) {
+  if (o.art === 'chat') {
+    return '<div class="onb-chatcard">' + o.bubbles.map(function (b) {
+      return '<div class="onb-brow onb-brow--' + b.side + '">' +
+        '<span class="onb-bub onb-bub--' + b.side + '">' + esc(b.t) + '</span>' +
+      '</div>';
+    }).join('') + '</div>';
+  }
+  if (o.art === 'solo') {
+    return '<div class="onb-art">' +
+      '<div class="onb-speech"><img src="' + ASSET.speech + '" alt="">' +
+        '<span>' + esc(o.speech) + '</span></div>' +
+      '<img class="onb-solo" src="' + ASSET.cardMelang + '" alt="">' +
+    '</div>';
+  }
+  if (o.art === 'duo') {
+    return '<div class="onb-art">' +
+      '<div class="onb-speech"><img src="' + ASSET.speech + '" alt="">' +
+        '<span>' + esc(o.speech) + '</span></div>' +
+      '<div class="onb-duo">' +
+        '<span class="onb-duo-a"><img src="' + ASSET.onbDuo + '" alt=""></span>' +
+        '<span class="onb-duo-b"><img src="' + ASSET.onbDuo + '" alt=""></span>' +
+      '</div>' +
+    '</div>';
+  }
+  /* letter — 편지 목차를 축소한 미리보기 */
+  var L = ONB_LETTER_ART;
+  var row = function (t) { return '<div class="onb-lrow"><span>' + esc(t) + '</span><em>⌄</em></div>'; };
+  return '<div class="onb-letterart">' +
+    '<div class="onb-lcol">' +
+      '<div class="onb-lhead"></div>' +
+      L.rows.map(row).join('') +
+      '<div class="onb-lgap"></div>' +
+      L.after.map(row).join('') +
+    '</div>' +
+    '<div class="onb-lcard">' +
+      '<p class="onb-lopen"><em>' + L.open.emoji + '</em><b>' + esc(L.open.name) + '</b>' +
+        '<span class="bar">|</span>' + esc(L.open.tail) + '<i class="chev">⌄</i></p>' +
+      '<p class="onb-lsub">' + esc(L.open.sub) + '</p>' +
+      '<div class="onb-lbox">' +
+        '<p class="t">' + esc(L.open.card.t) + '</p>' +
+        '<p class="d">' + esc(L.open.card.d) + '</p>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function scOnboarding(state, idx) {
+  var o = ONBOARDING[idx];
+  var next = ONBOARDING[idx + 1] ? ONBOARDING[idx + 1].id : 'onb-login';
+  var dots = ONBOARDING.map(function (_, i) {
+    return '<span class="onb-dot' + (i === idx ? ' on' : '') + '"></span>';
+  }).join('');
+
+  return '' +
+    '<div class="screen screen--paper">' +
+      '<button class="onb-skip" data-go="onb-login">' + esc(ONB_SKIP) + '</button>' +
+      onbArt(o) +
+      '<div class="onb-copy">' +
+        '<p class="onb-title">' + o.title.map(esc).join('<br>') + '</p>' +
+        '<p class="onb-desc">' + o.desc.map(esc).join('<br>') + '</p>' +
+      '</div>' +
+      '<div class="onb-foot">' +
+        '<div class="onb-dots">' + dots + '</div>' +
+        '<button class="primary-btn" data-go="' + next + '">' + esc(o.cta) + '</button>' +
+      '</div>' +
+    '</div>';
+}
 /* ---------- 라우팅 테이블 ---------- */
 var SCREENS = {
   'home':          scHome,
@@ -1138,5 +1210,10 @@ var SCREENS = {
   'letter-list':     scLetterList,
   'letter-ready':    scLetterReady,
   'letter-preview':  scLetterPreview,
-  'letter-opened':   scLetterOpened
+  'letter-opened':   scLetterOpened,
+
+  'onb-1': function (s) { return scOnboarding(s, 0); },
+  'onb-2': function (s) { return scOnboarding(s, 1); },
+  'onb-3': function (s) { return scOnboarding(s, 2); },
+  'onb-4': function (s) { return scOnboarding(s, 3); }
 };

@@ -1077,3 +1077,95 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .ch-from { width: 100%; font-family: var(--font-hand); font-size: 19px; color: var(--text-primary); }
 .ch-endbtn { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 16px; }
 .ch-endbtn .primary-btn { width: 303px; }
+
+/* ============================================================
+   온보딩 (Figma 온보딩 1~4)
+   ============================================================ */
+.onb-skip {
+  position: absolute; left: 20px; right: 20px; top: 31px; text-align: right;
+  font-family: var(--font-body); font-size: 13px; color: var(--text-secondary);
+}
+.onb-copy {
+  position: absolute; left: 20px; right: 20px; top: 442px;
+  display: flex; flex-direction: column; gap: 28px; text-align: center;
+}
+.onb-title { font-family: var(--font-body); font-weight: 700; font-size: 24px; color: var(--text-primary); }
+.onb-desc  { font-family: var(--font-body); font-size: 15px; line-height: 22px; color: var(--text-secondary); }
+.onb-foot {
+  position: absolute; left: 20px; right: 20px; top: 682px;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.onb-dots { display: flex; gap: 6px; }
+.onb-dot { width: 8px; height: 8px; border-radius: 50%; background: #D9D9D9; }
+.onb-dot.on { background: var(--accent-primary); }
+
+/* 1 · 대화 카드 */
+.onb-chatcard {
+  position: absolute; left: 47px; right: 47px; top: 170px; height: 207px;
+  background: var(--bg-white); border: .5px solid var(--border-subtle); border-radius: 20px;
+  padding: 24px 15px; display: flex; flex-direction: column; justify-content: space-between;
+}
+.onb-brow { display: flex; }
+.onb-brow--me { justify-content: flex-end; }
+.onb-bub {
+  max-width: 220px; padding: 10px 14px; border-radius: 14px;
+  font-family: var(--font-hand); font-size: 18px; color: var(--text-primary); white-space: nowrap;
+}
+.onb-bub--me    { background: var(--bubble-me-bg); border: 1.5px solid var(--bubble-me-line); }
+.onb-bub--other { background: var(--bubble-other); border: 1px solid #EFEFEF; }
+
+/* 2 · 4 · 캐릭터 + 말풍선 */
+.onb-art { position: absolute; left: 0; right: 0; top: 140px; height: 280px; }
+.onb-speech {
+  position: absolute; left: 50%; transform: translateX(-50%); top: 0; width: 184px; height: 51px;
+}
+.onb-speech img { position: absolute; inset: 0; width: 184px; height: 51px; }
+.onb-speech span {
+  position: absolute; left: 0; right: 0; top: 14px; text-align: center;
+  font-family: var(--font-hand); font-size: 17px; color: var(--text-primary); white-space: nowrap;
+}
+.onb-solo {
+  position: absolute; left: 50%; transform: translateX(-50%); top: 70px;
+  width: 130px; height: 150px; object-fit: contain;
+}
+.onb-duo { position: absolute; left: 0; right: 0; top: 60px; height: 180px; }
+.onb-duo span { position: absolute; overflow: hidden; display: block; }
+.onb-duo img  { position: absolute; height: 291px; max-width: none; }
+.onb-duo-a { left: 68px;  top: 18px; width: 139px; height: 162px; transform: rotate(-4.81deg); }
+.onb-duo-a img { left: -23px; top: -56px; width: 291px; }
+.onb-duo-b { left: 188px; top: 0;    width: 125px; height: 162px; transform: rotate(6.54deg); }
+.onb-duo-b img { left: -160px; top: -60px; width: 291px; }
+
+/* 3 · 편지 미리보기 */
+.onb-letterart { position: absolute; left: 44px; right: 44px; top: 112px; height: 300px; }
+.onb-lcol {
+  position: absolute; left: 63px; top: 0; width: 157px;
+  background: var(--bg-white); border-radius: 12px 12px 0 0; overflow: hidden;
+}
+.onb-lhead { height: 33px; background: #FFE685; }
+.onb-lrow {
+  height: 26px; display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 5px; border-bottom: .5px solid var(--border-subtle);
+  font-family: var(--font-body); font-weight: 600; font-size: 12px; color: var(--text-primary);
+}
+.onb-lrow em { font-style: normal; color: var(--text-disabled); }
+.onb-lgap { height: 157px; }
+.onb-lcard {
+  position: absolute; left: 0; right: 0; top: 85px;
+  background: var(--bg-white); border-top: .5px solid var(--border-subtle);
+  border-bottom: .5px solid var(--border-subtle); padding: 12px 13px;
+}
+.onb-lopen {
+  display: flex; align-items: center; gap: 2px;
+  font-family: var(--font-body); font-weight: 600; font-size: 16px; color: var(--text-primary);
+}
+.onb-lopen em { font-style: normal; margin-right: 4px; }
+.onb-lopen .bar { margin: 0 5px; font-weight: 400; color: var(--border-subtle); }
+.onb-lopen .chev { margin-left: auto; font-style: normal; color: var(--text-disabled); }
+.onb-lsub { margin-top: 8px; font-family: var(--font-body); font-size: 13px; line-height: 1.5; color: var(--text-disabled); }
+.onb-lbox {
+  margin-top: 14px; background: #F8F8F8; border-radius: 12px; padding: 12px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.onb-lbox .t { font-family: var(--font-body); font-weight: 600; font-size: 15px; line-height: 1.5; color: var(--text-primary); }
+.onb-lbox .d { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
