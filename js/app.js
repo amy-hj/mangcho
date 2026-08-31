@@ -393,6 +393,15 @@ viewport.addEventListener('change', function (e) {
 viewport.addEventListener('input', function (e) {
   if (e.target.id === 'onb-name') { state.onbName = e.target.value; return; }
 
+  /* 회원정보 폼 (마이 06-1 · 온보딩 7) — 다시 그리지 않고 값만 담아둡니다 */
+  var ff = e.target.closest('[data-form]');
+  if (ff) {
+    var key = ff.dataset.form;
+    if (key !== 'name' && key !== 'region') ff.value = ff.value.replace(/[^0-9]/g, '');
+    state.form[key] = ff.value;
+    return;
+  }
+
   if (e.target.id === 'rename-input') {
     var c = viewport.querySelector('#rename-count');
     if (c) c.textContent = e.target.value.length + '/50';

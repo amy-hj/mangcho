@@ -815,3 +815,41 @@ SCREEN_INDEX.push(
   { id: 'onb-topic',   cat: '온보딩', label: '8 주 고민 고르기' },
   { id: 'onb-consent', cat: '온보딩', label: '9 데이터 전송 동의' }
 );
+
+/* ---------- 온보딩 10~13 코치마크 (Figma 866:4224 / 866:4614 / 866:4445 / 872:4749)
+   화면 위에 딤을 덮고 한 곳만 뚫어 보여주는 튜토리얼입니다.
+   hole = [x, y, w, h] · tip = 말풍선 위치/크기 · ty = 말풍선 안 글 위치     */
+ASSET.coachTip10 = A + 'img/coach-tip-10.svg';
+ASSET.coachTip11 = A + 'img/coach-tip-11.svg';
+ASSET.coachTip12 = A + 'img/coach-tip-12.svg';
+ASSET.coachTip13 = A + 'img/coach-tip-13.svg';
+
+var COACH = [
+  { id: 'onb-10', base: 'home', label: '10 대화 탭 안내',
+    hole: [116, 738, 65, 65],
+    tip: { x: 58, y: 642.6, w: 184, h: 67.33, img: ASSET.coachTip10, ty: 10, tw: 154 },
+    text: '여길 누르면 나랑 대화할 수 있어',
+    next: 'onb-11' },
+
+  { id: 'onb-11', base: 'chat-list', label: '11 대화가 쌓이면',
+    hole: [116, 738, 65, 65],
+    tip: { x: 41, y: 642.6, w: 218, h: 67.33, img: ASSET.coachTip11, ty: 10, tw: 189 },
+    text: '대화가 쌓일수록 너에 대해\n더 자세히 분석할 수 있어',
+    next: 'onb-12' },
+
+  { id: 'onb-12', base: 'home', label: '12 편지 탭 안내',
+    hole: [195, 738, 65, 65],
+    tip: { x: 126, y: 642.6, w: 206, h: 67.33, img: ASSET.coachTip12, ty: 10, tw: 154 },
+    text: '매달 1일엔 너한테 편지를 보내줄게.',
+    next: 'onb-13' },
+
+  { id: 'onb-13', base: 'letter-preview', label: '13 편지가 뭔지',
+    hole: [12, 303, 353, 152],
+    tip: { x: 77, y: 187, w: 206, h: 94, img: ASSET.coachTip13, ty: 13, tw: 154 },
+    text: '한 달 동안 나눈 대화와 명반을 분석한, 일종의 ‘종합 맞춤 안내서’야!',
+    next: 'home' }
+];
+
+COACH.forEach(function (c) {
+  SCREEN_INDEX.push({ id: c.id, cat: '온보딩', label: c.label });
+});

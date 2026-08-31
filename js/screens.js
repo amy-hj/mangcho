@@ -498,32 +498,47 @@ function scMy(state) {
 }
 
 /* ---------- 06-1 회원정보 수정 ---------- */
-/* 회원정보 폼 — 마이 06-1 과 온보딩 7 이 함께 씁니다 */
+/* 회원정보 폼 — 마이 06-1 과 온보딩 7 이 함께 씁니다 (직접 입력·수정 가능) */
 function profileFields(state, extra) {
   var f = state.form;
-  var num = function (val, unit) {
+  var lock = f.unknownTime;
+
+  var num = function (key, val, unit, max, len) {
     return '<span class="num-field">' +
-      '<span class="num-box">' + esc(val) + '</span>' +
+      '<input class="num-box" type="text" inputmode="numeric" maxlength="' + len + '"' +
+        ' data-form="' + key + '" value="' + esc(val) + '"' +
+        ' placeholder="' + esc(max) + '"' +
+        (lock && (key === 'hour' || key === 'minute') ? ' disabled' : '') + '>' +
       '<span class="unit">' + esc(unit) + '</span>' +
     '</span>';
   };
+
   return '' +
     '<div class="edit-fields">' +
       '<div class="field"><p class="field-label">이름</p>' +
-        '<div class="text-box">' + esc(f.name) + '</div></div>' +
+        '<input class="text-box" type="text" maxlength="20" data-form="name" value="' + esc(f.name) + '"' +
+          ' placeholder="이름을 입력해줘"></div>' +
 
       '<div class="field"><p class="field-label">생년월일</p>' +
-        '<div class="num-row">' + num(f.year, '년') + num(f.month, '월') + num(f.day, '일') + '</div>' +
+        '<div class="num-row">' +
+          num('year', f.year, '년', 'YYYY', 4) +
+          num('month', f.month, '월', 'MM', 2) +
+          num('day', f.day, '일', 'DD', 2) +
+        '</div>' +
       '</div>' +
 
       '<div class="field"><p class="field-label">태어난 시간</p>' +
-        '<div class="num-row num-row--2">' + num(f.hour, '시') + num(f.minute, '분') + '</div>' +
-        '<label class="chk chk--sm"><input type="checkbox" id="chk-unknown-time"' + (f.unknownTime ? ' checked' : '') + '>' +
+        '<div class="num-row num-row--2">' +
+          num('hour', f.hour, '시', 'HH', 2) +
+          num('minute', f.minute, '분', 'MM', 2) +
+        '</div>' +
+        '<label class="chk chk--sm"><input type="checkbox" id="chk-unknown-time"' + (lock ? ' checked' : '') + '>' +
           '<span class="box"></span><span class="txt">태어난 시간을 모르겠어!</span></label>' +
       '</div>' +
 
       '<div class="field"><p class="field-label">출생지역 </p>' +
-        '<div class="text-box">' + esc(f.region) + '</div></div>' +
+        '<input class="text-box" type="text" maxlength="40" data-form="region" value="' + esc(f.region) + '"' +
+          ' placeholder="태어난 지역을 입력해줘"></div>' +
 
       '<div class="field"><p class="field-label">성별</p>' +
         '<div class="gender-row">' +
@@ -1304,11 +1319,37 @@ function scOnbConsent(state) {
         '</div>' +
         '<div class="consent-rows">' + rows + '</div>' +
         '<div class="consent-btns">' +
-          '<button class="primary-btn" data-go="home">' + esc(C.ok) + '</button>' +
+          '<button class="primary-btn" data-go="onb-10">' + esc(C.ok) + '</button>' +
           '<button class="subtle-btn" data-go="onb-topic">' + esc(C.no) + '</button>' +
         '</div>' +
       '</div>' +
     '</div>';
+}
+
+
+/* ---------- 온보딩 10~13 코치마크 ----------
+   기존 화면을 그대로 그린 뒤, 그 위에 딤 + 말풍선을 얹습니다.
+   딤은 구멍 하나만 남기고 화면을 덮습니다 (box-shadow 로 바깥을 칠함). */
+function coachMark(c) {
+  var t = c.tip;
+  return '' +
+    '<div class="coach" data-go="' + c.next + '">' +
+      '<div class="coach-hole" style="left:' + c.hole[0] + 'px;top:' + c.hole[1] + 'px;' +
+        'width:' + c.hole[2] + 'px;height:' + c.hole[3] + 'px"></div>' +
+      '<div class="coach-tip" style="left:' + t.x + 'px;top:' + t.y + 'px;' +
+        'width:' + t.w + 'px;height:' + t.h + 'px">' +
+        '<img src="' + t.img + '" alt="">' +
+        '<p class="coach-text" style="top:' + t.ty + 'px;width:' + t.tw + 'px">' +
+          esc(c.text).replace(/\n/g, '<br>') +
+        '</p>' +
+      '</div>' +
+    '</div>';
+}
+
+function scCoach(state, i) {
+  var c = COACH[i];
+  var base = SCREENS[c.base](state);
+  return base.replace(/<\/div>$/, coachMark(c) + '</div>');
 }
 
 /* ---------- 라우팅 테이블 ---------- */
@@ -1354,5 +1395,10 @@ var SCREENS = {
   'onb-pick':    scOnbPick,
   'onb-profile': scOnbProfile,
   'onb-topic':   scOnbTopic,
-  'onb-consent': scOnbConsent
+  'onb-consent': scOnbConsent,
+
+  'onb-10': function (s) { return scCoach(s, 0); },
+  'onb-11': function (s) { return scCoach(s, 1); },
+  'onb-12': function (s) { return scCoach(s, 2); },
+  'onb-13': function (s) { return scCoach(s, 3); }
 };
