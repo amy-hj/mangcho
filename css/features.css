@@ -1,16 +1,16 @@
-/* ---------- 달력 ---------- */
+/* 달력 */
 .cal-cell--today .cal-day { font-weight: 800; }
 .cal-cell--today .cal-circle { outline: 2px solid #000000; outline-offset: -1px; border-radius: 50%; }
 .cal-cell--future { opacity: .45; }
 .attend-cta.is-done { background: #EDEDED; color: #666666; cursor: default; }
 .attend-cta.is-done .stack { opacity: .4; }
-
-/* ---------- 운세 ---------- */
+ 
+/* 운세 */
 .fortune { gap: 22px; }
 .f-tag { font-size: 12px; color: #666666; text-align: center; margin: -8px 0 0; font-family: var(--font-body, inherit); }
 .f-tag b { color: #000000; }
-
-/* ---------- 추천 문구 스와이프 ---------- */
+ 
+/*  추천 문구 스와이프 */
 .suggests { left: 0 !important; width: 375px !important; padding: 0 16px; box-sizing: border-box; align-items: stretch; }
 .suggests .line {
   display: flex; flex-wrap: nowrap; gap: 14px;
@@ -20,17 +20,17 @@
 }
 .suggests .line::-webkit-scrollbar { display: none; }
 .suggests .line .chip { flex: 0 0 auto; scroll-snap-align: start; white-space: nowrap; }
-
-/* ---------- 대화 목록 고정 ---------- */
+ 
+/* 대화 목록 핀 */
 .list-item .nm-wrap { display: flex; align-items: center; gap: 4px; min-width: 0; }
 .list-item .nm-wrap .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .list-item .nm-wrap .pin { position: static; width: 12px; height: 12px; flex: none; }
-
-/* ---------- 씨앗 내역 ---------- */
+ 
+/* 씨앗 내역 */
 .hist-row .delta.minus { color: #666666; }
 .hist-empty { font-size: 13px; color: #666666; padding: 12px 0 4px; text-align: center; }
-
-/* ---------- 4 사주팔자 · 자미두수  ---------- */
+ 
+/* 사주팔자 · 자미두수 */
 .sj-tabs { position: absolute; left: 20px; right: 20px; top: 113px; display: flex; gap: 8px; }
 .sj-tab {
   flex: 1 0 0; min-width: 0; padding: 10px; border-radius: 8px; cursor: pointer;
@@ -48,7 +48,7 @@
 .sj-card .card-title { display: flex; align-items: baseline; gap: 8px; }
 .sj-sub { font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); font-weight: 400; }
 .sj-err { padding: 40px 24px; text-align: center; font-family: var(--font-body); color: var(--text-secondary); }
-
+ 
 .sj-grid { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .sj-col { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 10px; background: var(--bg-default); }
 .sj-col--day { outline: 1.5px solid var(--accent-primary); }
@@ -68,20 +68,20 @@
 .sj-wx-water { background: #3A6FC4; }
 .sj-daygan { font-family: var(--font-body); font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 .sj-daygan b { color: var(--text-primary); }
-
+ 
 .sj-wx-row { width: 100%; display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 12px; }
 .sj-wx-k { width: 48px; padding: 3px 0; border-radius: 6px; text-align: center; color: var(--text-inverse); font-weight: 700; }
 .sj-wx-bar { flex: 1; height: 8px; background: var(--bg-default); border-radius: 4px; overflow: hidden; }
 .sj-wx-bar i { display: block; height: 100%; background: var(--accent-primary); border-radius: 4px; }
 .sj-wx-n { width: 16px; text-align: right; color: var(--text-secondary); }
-
+ 
 .sj-dy-row { width: 100%; display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
 .sj-dy-row::-webkit-scrollbar { display: none; }
 .sj-dy { flex: 0 0 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 10px; background: var(--bg-default); font-family: var(--font-body); font-size: 11px; color: var(--text-secondary); }
 .sj-dy.on { background: var(--bubble-me-bg); outline: 1.5px solid var(--accent-primary); color: var(--text-primary); }
 .sj-dy-gz { font-size: 16px; font-weight: 700; color: var(--text-primary); }
 .sj-dy-age { font-weight: 700; }
-
+ 
 /* 자미두수 명반 */
 .zw-wrap { position: absolute; left: 0; right: 0; top: 165px; bottom: 0; padding: 0 12px 20px; overflow-y: auto; scrollbar-width: none; }
 .zw-wrap::-webkit-scrollbar { display: none; }
@@ -105,15 +105,8 @@
 .zw-c-note { font-size: 9px; color: var(--text-disabled); margin-top: 6px; }
 .zw-legend { padding: 8px 4px 0; font-family: var(--font-body); font-size: 11px; color: var(--text-secondary); text-align: center; }
 .zw-legend .dim { color: var(--text-disabled); }
-
-/* ---------- 온보딩 햄찌 → 홈/마이 ---------- */
+ 
+/* 온보딩 햄찌 → 홈/마이 */
 .home-char--kochi { object-fit: contain; }
-.home-ham-name {
-  position: absolute; left: 50%; top: 588px; transform: translateX(-50%);
-  padding: 3px 10px; border-radius: 12px; background: var(--bg-white); border: .5px solid var(--border-subtle);
-  font-family: var(--font-hand); font-size: 13px; color: var(--text-primary); white-space: nowrap; z-index: 2;
-}
-.my-ham .lbl b { font-weight: 700; }
-.my-ham .avatar44 { width: 32px; height: 32px; border-radius: 50%; }
-.sj-err { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.sj-err { display: flex; flex-direction: column; align-items: center; gap: 16px; white-space: pre-wrap; word-break: break-all; }
 .sj-err-btn { flex: none; padding: 10px 20px; }
