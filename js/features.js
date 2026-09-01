@@ -1,12 +1,13 @@
 /* ============================================================
+   Hamnal — 기능 패치 (features.js)   ※ 맨 마지막에 로드
    ▶ 덮어쓰는 함수: calendarMarkup, attendBackdrop, scAttendDone, scFortune,
                     bubble, chatListMarkup, scMy, scMyHistory, refreshSeeds
    ▶ 감싸는 함수:   render (앞뒤 훅), save (기능 상태 동시 저장)
    ▶ 추가 화면:     saju.js 참고 (사주팔자 / 자미두수)
-
+ 
    기능 상태(FEAT)는 별도 키 'hamnal_feat_v1' 에 저장됩니다.
    ============================================================ */
-
+ 
 /* ---------- 기능 상태 ---------- */
 var FEAT_KEY = 'hamnal_feat_v1';
 var FEAT = (function () {
@@ -23,13 +24,13 @@ var FEAT = (function () {
   };
 })();
 function featSave() { try { localStorage.setItem(FEAT_KEY, JSON.stringify(FEAT)); } catch (e) {} }
-
+ 
 /* ---------- 날짜 유틸 ---------- */
 function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 function ymdDot(d) { return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0'); }
 function ym(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
-
-/* 편지 D-day */
+ 
+/* 편지 D-day: 이번 달 편지를 안 읽었으면 "편지 도착", 읽었으면 다음 달 1일까지 D-n */
 function letterLabel() {
   var today = new Date();
   if (!FEAT.letterRead[ym(today)]) return '편지 도착';
@@ -37,8 +38,8 @@ function letterLabel() {
   var days = Math.round((next - new Date(today.getFullYear(), today.getMonth(), today.getDate())) / 86400000);
   return '편지 D-' + days;
 }
-
-/* ---------- 씨앗 ---------- */
+ 
+/* ---------- 씨앗 (단일 진실 소스 = FEAT.seeds) ---------- */
 function addSeeds(n, label) {
   FEAT.seeds += n;
   FEAT.seedHistory.unshift({ label: label, at: ymdDot(new Date()), delta: (n > 0 ? '+ ' : '- ') + Math.abs(n) });
@@ -50,14 +51,20 @@ function syncSeeds() {
   HOME.letter = letterLabel();
 }
 refreshSeeds = function () { syncSeeds(); };
-
-/* ---------- 회원정보 ---------- */
+ 
+/* ---------- 회원정보 → 마이페이지 반영 ---------- */
 var _formApplied = false;
 function syncProfile() {
   if (typeof state === 'undefined') return;
 
   if (FEAT.form && !_formApplied) { state.form = Object.assign({}, state.form, FEAT.form); _formApplied = true; }
   if (FEAT.hamName && !state.onbName) state.onbName = FEAT.hamName;
+
+  if (typeof ME !== 'undefined' && ME.pet) {
+    var ch = CHARACTERS.filter(function (x) { return x.id === state.charId; })[0] || CHARACTERS[0];
+    ME.pet.name = state.onbName ? state.onbName + ' (' + ch.name + ')' : ch.name;
+    ME.pet.desc = ch.desc;
+  }
   var f = state.form || PROFILE_FORM;
   ME.name  = f.name || ME.name;
   ME.sex   = /여/.test(f.gender || '') ? '♀' : (/남/.test(f.gender || '') ? '♂' : ME.sex);
@@ -65,7 +72,7 @@ function syncProfile() {
              (f.unknownTime ? ' (시간 모름)' : ' ' + String(f.hour).padStart(2, '0') + ':' + String(f.minute).padStart(2, '0')) +
              (f.region ? ' ' + f.region : '');
 }
-
+ 
 /* ---------- render 훅 ---------- */
 var FORM_SCREENS = { 'onb-profile': 1, 'my-edit': 1, 'onb-pick': 1 };
 function captureForm() {
@@ -85,14 +92,14 @@ render = function (id, opts) {
   if (id === 'attend-done') { ATTEND_DONE.desc = ['오늘 씨앗 1개를 받았어요!', '자정이 지나면 안 쓴 씨앗은 사라져요']; }
   _renderOrig(id, opts);
   setupSuggestSwipe();
-  if (id === 'letter-opened') {
+  if (id === 'letter-opened') {   
     var k = ym(new Date());
     if (!FEAT.letterRead[k]) { FEAT.letterRead[k] = true; featSave(); }
   }
 };
 var _saveOrig = save;
 save = function () { _saveOrig(); featSave(); };
-
+ 
 /* 추천 문구 스와이프 */
 function setupSuggestSwipe() {
   var box = document.querySelector('#viewport .suggests');
@@ -109,8 +116,8 @@ function setupSuggestSwipe() {
     line.addEventListener('click', function (e) { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
   });
 }
-
-/* 출석 달력 */
+ 
+/*  출석 달력 (실제 달력 · 전월/후월 · 오늘 테두리 · 도장) */
 function calState() {
   var t = new Date();
   if (!FEAT.cal) FEAT.cal = { y: t.getFullYear(), m: t.getMonth() + 1 };
@@ -163,10 +170,8 @@ scAttendDone = function () {
       '<button class="confirm confirm--wide" data-go="attend">' + esc(ATTEND_DONE.confirm) + '</button>' +
     '</div></div>';
 };
-
-/* ============================================================
-   1-3 · 오늘의 운세 (생년월일시 → 일간 × 오늘 일진, 결정론)
-   ============================================================ */
+ 
+/* 오늘의 운세 (생년월일시 → 일간 × 오늘 일진, 결정론) */
 scFortune = function () {
   var f = sajuForm(), F;
   try { F = SAJU.fortune(f, new Date()); } catch (e) { F = FORTUNE; }
@@ -190,8 +195,8 @@ scFortune = function () {
       '</div>' +
     '</div>';
 };
-
-/* 코치 선택 시 말풍선 아바타/이름· 핀 위치 */
+ 
+/* 코치 선택 시 말풍선 아바타/이름 · 핀 위치 */
 bubble = function (m) {
   var isMe = m.side === 'me';
   var box = '<div class="bubble bubble--' + (isMe ? 'me' : 'other') + '"><p class="txt">' + esc(m.text) + '</p><span class="at">' + esc(m.at) + '</span></div>';
@@ -213,7 +218,7 @@ chatListMarkup = function (rooms) {
   }).join('');
   return '<div class="list-wrap"><div class="list-title">대화 목록</div><div class="list-items">' + items + '</div></div>';
 };
-
+ 
 /* 온보딩에서 고른 햄찌 → 홈 캐릭터 이미지 + 이름 */
 function hamInfo() {
   var kochi = (typeof state !== 'undefined' && state.charId === 'kochi');
@@ -227,19 +232,17 @@ homeBody = function () {
   var h = hamInfo();
   var html = _homeBodyOrig();
   html = html.replace('<img class="home-char" src="' + ASSET.charHome + '"', '<img class="home-char' + (h.kochi ? ' home-char--kochi' : '') + '" src="' + h.homeImg + '"');
-  if (h.nick) html = html.replace('<img class="home-char', '<span class="home-ham-name">' + esc(h.nick) + '</span><img class="home-char');
   return html;
 };
-
-/*  마이 (회원정보 반영 + 명반 진입), 씨앗 내역 */
+ 
+/* 마이 (회원정보 반영 + 명반 진입) · 씨앗 내역 */
 var _scMyOrig = scMy;
 scMy = function (state) {
   var html = _scMyOrig(state);
-   
   var h = hamInfo();
-  var ham = '<div class="my-card my-menu my-ham"><img class="avatar44" src="' + h.avatar + '" alt=""><span class="lbl">함께하는 햄찌 · <b>' + esc(h.label) + '</b></span></div>';
+  html = html.replace('<img class="avatar34" src="' + ASSET.avatarTori + '"', '<img class="avatar34" src="' + h.avatar + '"');
   var card = '<button class="my-card my-menu" data-go="saju"><span class="lbl">내 명반 · 사주팔자 / 자미두수</span><img class="chev" src="' + ASSET.chevron + '" alt=""></button>';
-  return html.replace('<p class="my-section">설정</p>', ham + card + '<p class="my-section">설정</p>');
+  return html.replace('<p class="my-section">설정</p>', card + '<p class="my-section">설정</p>');
 };
 scMyHistory = function (state) {
   var hist = FEAT.seedHistory.length ? FEAT.seedHistory : [];
@@ -263,17 +266,17 @@ scMyHistory = function (state) {
         '<div class="my-card hist-card"><p class="card-title">사용내역</p>' + rows + '</div>' +
       '</div></div>';
 };
-
+ 
 /* SCREENS 맵은 함수 참조를 고정으로 들고 있으므로 덮어쓴 화면 함수를 재등록 */
 SCREENS['fortune']     = scFortune;
 SCREENS['attend-done'] = scAttendDone;
 SCREENS['my']          = scMy;
 SCREENS['my-history']  = scMyHistory;
-
-/*    이벤트 (app.js 리스너 뒤에 실행됨) */
+ 
+/* 이벤트 (app.js 리스너 뒤에 실행됨) */
 document.getElementById('viewport').addEventListener('click', function (e) {
   var el;
-
+ 
   /* 달력 전월/후월 */
   el = e.target.closest('[data-cal]');
   if (el) {
@@ -282,7 +285,7 @@ document.getElementById('viewport').addEventListener('click', function (e) {
     else { cs.m++; if (cs.m > 12) { cs.m = 1; cs.y++; } }
     featSave(); render(state.current, { replace: true }); return;
   }
-
+ 
   /* 출석체크: 1일 1회 · 씨앗 +1 · 도장 · 팝업 */
   if (e.target.closest('#btn-attend')) {
     var key = ymd(new Date());
@@ -292,23 +295,23 @@ document.getElementById('viewport').addEventListener('click', function (e) {
     addSeeds(1, '출석 체크');
     render('attend-done'); return;
   }
-
+ 
   /* 씨앗 구매 (app.js 가 먼저 state.seeds 를 올린 뒤 실행됨 → FEAT 기준으로 확정) */
   if (e.target.closest('#btn-buy-seed')) {
     var p = SEED_PRODUCTS[state.payIndex] || { qty: 0, label: '씨앗' };
     addSeeds(p.qty, '씨앗 충전' + p.label);
     render('my-charge', { replace: true }); return;
   }
-
+ 
   /* 온보딩 6: 햄찌 카드 선택 시 이름과 함께 저장 */
   if (e.target.closest('[data-onbchar]')) { captureForm(); return; }
-
+ 
   /* 회원정보 저장 */
   if (e.target.closest('#btn-edit-save')) {
     FEAT.form = Object.assign({}, state.form); featSave();
     render('my', { replace: true }); return;
   }
-
+ 
   /* "처음부터": 기능 상태도 초기화 */
   if (e.target.closest('#btn-reset')) {
     try { localStorage.removeItem(FEAT_KEY); } catch (e2) {}
@@ -318,8 +321,8 @@ document.getElementById('btn-reset').addEventListener('click', function () {
   try { localStorage.removeItem(FEAT_KEY); } catch (e) {}
   location.reload();
 });
-
-/* ---------- 사이드바 목록 재구성 (새 화면 반영) & 최초 렌더 ---------- */
+ 
+/* 사이드바 목록 재구성 (새 화면 반영) & 최초 렌더 */
 (function rebuildIndex() {
   var nav = document.getElementById('screen-index');
   nav.innerHTML = '';
