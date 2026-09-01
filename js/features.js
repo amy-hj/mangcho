@@ -186,7 +186,6 @@ scFortune = function () {
           '<div class="f-close-row"><button class="f-close" data-go="home"><img src="' + ASSET.modalClose + '" alt="닫기"></button></div>' +
           '<div class="f-body">' +
             '<div class="f-score"><p class="f-score-label">' + esc(F.scoreLabel) + '</p><p class="f-score-value">' + esc(F.score) + '</p></div>' +
-            (F.ss ? '<p class="f-tag">오늘의 일진 ' + esc(F.todayGz) + ' · 나에겐 <b>' + esc(F.ss) + '</b>의 날</p>' : '') +
             '<p class="f-quote">' + esc(F.quote) + '</p>' +
             '<div class="f-desc">' + F.body.map(esc).join('<br>') + '</div>' +
           '</div>' +
