@@ -1,8 +1,4 @@
 /* ============================================================
-   Hamnal — 기능 패치 (features.js)   ※ 맨 마지막에 로드
-   J님 파일(screens.js / data.js / app.js / style.css)은 수정하지 않습니다.
-   같은 이름의 함수를 여기서 다시 정의해 동작을 바꿉니다.
-
    ▶ 덮어쓰는 함수: calendarMarkup, attendBackdrop, scAttendDone, scFortune,
                     bubble, chatListMarkup, scMy, scMyHistory, refreshSeeds
    ▶ 감싸는 함수:   render (앞뒤 훅), save (기능 상태 동시 저장)
@@ -17,13 +13,13 @@ var FEAT = (function () {
   var d = null;
   try { d = JSON.parse(localStorage.getItem(FEAT_KEY) || 'null'); } catch (e) {}
   return d || {
-    seeds: 0,              /* 해바라기씨: 0부터 시작 */
-    seedHistory: [],       /* { label, at, delta } — 최신순 */
-    attendance: {},        /* { 'YYYY-MM-DD': true } */
-    letterRead: {},        /* { 'YYYY-MM': true } */
-    form: null,            /* 회원정보 (PROFILE_FORM 형태) */
-    hamName: '',           /* 온보딩에서 지어준 햄찌 이름 */
-    cal: null              /* { y, m } 달력 표시 월 */
+    seeds: 0,
+    seedHistory: [],
+    attendance: {},
+    letterRead: {},
+    form: null,
+    hamName: '',
+    cal: null
   };
 })();
 function featSave() { try { localStorage.setItem(FEAT_KEY, JSON.stringify(FEAT)); } catch (e) {} }
@@ -33,7 +29,7 @@ function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padSta
 function ymdDot(d) { return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0'); }
 function ym(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
 
-/* 편지 D-day: 이번 달 편지를 안 읽었으면 "편지 도착", 읽었으면 다음 달 1일까지 D-n */
+/* 편지 D-day */
 function letterLabel() {
   var today = new Date();
   if (!FEAT.letterRead[ym(today)]) return '편지 도착';
@@ -42,7 +38,7 @@ function letterLabel() {
   return '편지 D-' + days;
 }
 
-/* ---------- 씨앗 (단일 진실 소스 = FEAT.seeds) ---------- */
+/* ---------- 씨앗 ---------- */
 function addSeeds(n, label) {
   FEAT.seeds += n;
   FEAT.seedHistory.unshift({ label: label, at: ymdDot(new Date()), delta: (n > 0 ? '+ ' : '- ') + Math.abs(n) });
@@ -53,13 +49,13 @@ function syncSeeds() {
   HOME.seeds  = String(FEAT.seeds);
   HOME.letter = letterLabel();
 }
-refreshSeeds = function () { syncSeeds(); }; /* app.js 의 "메시지 수 = 씨앗" 규칙 폐기 */
+refreshSeeds = function () { syncSeeds(); };
 
-/* ---------- 회원정보 → 마이페이지 반영 ---------- */
+/* ---------- 회원정보 ---------- */
 var _formApplied = false;
 function syncProfile() {
   if (typeof state === 'undefined') return;
-  /* 저장된 회원정보는 최초 1회만 state.form 에 적용 — 이후엔 온보딩/마이에서 입력한 state.form 이 항상 우선 */
+
   if (FEAT.form && !_formApplied) { state.form = Object.assign({}, state.form, FEAT.form); _formApplied = true; }
   if (FEAT.hamName && !state.onbName) state.onbName = FEAT.hamName;
   var f = state.form || PROFILE_FORM;
@@ -83,13 +79,13 @@ function captureForm() {
 }
 var _renderOrig = render;
 render = function (id, opts) {
-  if (state && state.current && FORM_SCREENS[state.current] && state.current !== id) captureForm(); /* 폼 화면을 떠날 때 저장 */
+  if (state && state.current && FORM_SCREENS[state.current] && state.current !== id) captureForm();
   syncSeeds();
   syncProfile();
   if (id === 'attend-done') { ATTEND_DONE.desc = ['오늘 씨앗 1개를 받았어요!', '자정이 지나면 안 쓴 씨앗은 사라져요']; }
   _renderOrig(id, opts);
   setupSuggestSwipe();
-  if (id === 'letter-opened') {            /* 편지를 열면 이번 달 읽음 처리 → D-day 카운트 시작 */
+  if (id === 'letter-opened') {
     var k = ym(new Date());
     if (!FEAT.letterRead[k]) { FEAT.letterRead[k] = true; featSave(); }
   }
@@ -97,7 +93,7 @@ render = function (id, opts) {
 var _saveOrig = save;
 save = function () { _saveOrig(); featSave(); };
 
-/* 2-2 · 추천 문구 스와이프: CSS 없이도 동작하도록 스타일을 직접 주고, 데스크톱에선 마우스 드래그로 스크롤 */
+/* 추천 문구 스와이프 */
 function setupSuggestSwipe() {
   var box = document.querySelector('#viewport .suggests');
   if (!box) return;
@@ -110,14 +106,11 @@ function setupSuggestSwipe() {
     line.addEventListener('mousedown', function (e) { down = true; moved = false; sx = e.pageX; sl = line.scrollLeft; line.style.cursor = 'grabbing'; });
     line.addEventListener('mousemove', function (e) { if (!down) return; var dx = e.pageX - sx; if (Math.abs(dx) > 4) moved = true; line.scrollLeft = sl - dx; });
     ['mouseup', 'mouseleave'].forEach(function (ev) { line.addEventListener(ev, function () { down = false; line.style.cursor = 'grab'; }); });
-    /* 드래그로 넘긴 뒤 손을 뗄 때 칩이 눌리지 않게 */
     line.addEventListener('click', function (e) { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
   });
 }
 
-/* ============================================================
-   1-4 · 출석 달력 (실제 달력 · 전월/후월 · 오늘 테두리 · 도장)
-   ============================================================ */
+/* 출석 달력 */
 function calState() {
   var t = new Date();
   if (!FEAT.cal) FEAT.cal = { y: t.getFullYear(), m: t.getMonth() + 1 };
@@ -198,9 +191,7 @@ scFortune = function () {
     '</div>';
 };
 
-/* ============================================================
-   2-1 · 코치 선택 시 말풍선 아바타/이름   2-3 · 핀 위치
-   ============================================================ */
+/* 코치 선택 시 말풍선 아바타/이름· 핀 위치 */
 bubble = function (m) {
   var isMe = m.side === 'me';
   var box = '<div class="bubble bubble--' + (isMe ? 'me' : 'other') + '"><p class="txt">' + esc(m.text) + '</p><span class="at">' + esc(m.at) + '</span></div>';
@@ -223,9 +214,7 @@ chatListMarkup = function (rooms) {
   return '<div class="list-wrap"><div class="list-title">대화 목록</div><div class="list-items">' + items + '</div></div>';
 };
 
-/* ============================================================
-   온보딩에서 고른 햄찌 → 홈 캐릭터 이미지 + 이름
-   ============================================================ */
+/* 온보딩에서 고른 햄찌 → 홈 캐릭터 이미지 + 이름 */
 function hamInfo() {
   var kochi = (typeof state !== 'undefined' && state.charId === 'kochi');
   var base = kochi ? '코치' : '멜랑';
@@ -242,13 +231,11 @@ homeBody = function () {
   return html;
 };
 
-/* ============================================================
-   3-1 · 마이 (회원정보 반영 + 명반 진입)   3-2 · 씨앗 내역
-   ============================================================ */
+/*  마이 (회원정보 반영 + 명반 진입), 씨앗 내역 */
 var _scMyOrig = scMy;
 scMy = function (state) {
   var html = _scMyOrig(state);
-  /* 프로필 카드 아래에 "함께하는 햄찌" + "내 명반" 카드 삽입 */
+   
   var h = hamInfo();
   var ham = '<div class="my-card my-menu my-ham"><img class="avatar44" src="' + h.avatar + '" alt=""><span class="lbl">함께하는 햄찌 · <b>' + esc(h.label) + '</b></span></div>';
   var card = '<button class="my-card my-menu" data-go="saju"><span class="lbl">내 명반 · 사주팔자 / 자미두수</span><img class="chev" src="' + ASSET.chevron + '" alt=""></button>';
@@ -283,9 +270,7 @@ SCREENS['attend-done'] = scAttendDone;
 SCREENS['my']          = scMy;
 SCREENS['my-history']  = scMyHistory;
 
-/* ============================================================
-   이벤트 (app.js 리스너 뒤에 실행됨)
-   ============================================================ */
+/*    이벤트 (app.js 리스너 뒤에 실행됨) */
 document.getElementById('viewport').addEventListener('click', function (e) {
   var el;
 
