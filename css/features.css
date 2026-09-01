@@ -1,0 +1,104 @@
+/* ============================================================
+   Hamnal — 기능 패치 스타일 (features.css)  ※ style.css 뒤에 로드
+   ============================================================ */
+
+/* ---------- 1-4 달력 ---------- */
+.cal-cell--today .cal-day { font-weight: 800; }
+.cal-cell--today .cal-circle { outline: 2px solid #000000; outline-offset: -1px; border-radius: 50%; }
+.cal-cell--future { opacity: .45; }
+.cal-cnt { font-size: 11px; color: #666666; font-weight: 400; margin-left: 6px; }
+.attend-cta.is-done { background: #EDEDED; color: #666666; cursor: default; }
+.attend-cta.is-done .stack { opacity: .4; }
+.modal--attend .m-stamp { width: 64px; height: 64px; display: block; margin: 0 auto 8px; }
+
+/* ---------- 1-3 운세 ---------- */
+.fortune { gap: 22px; }            /* J님 30px → 22px: .f-tag 한 줄 추가분 상쇄 (모달 총높이 유지) */
+.f-tag { font-size: 12px; color: #666666; text-align: center; margin: -8px 0 0; font-family: var(--font-body, inherit); }
+.f-tag b { color: #000000; }
+
+/* ---------- 2-2 추천 문구 스와이프 ---------- */
+/* style.css 는 .suggests 를 left:-95.5px / width:573px 로 화면 밖까지 펼치는 정적 연출.
+   스와이프를 위해 화면 폭(375)으로 되돌리고 줄 단위로 가로 스크롤합니다. (top 은 J님 값 유지) */
+.suggests { left: 0 !important; width: 375px !important; padding: 0 16px; box-sizing: border-box; align-items: stretch; }
+.suggests .line {
+  display: flex; flex-wrap: nowrap; gap: 14px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity; padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.suggests .line::-webkit-scrollbar { display: none; }
+.suggests .line .chip { flex: 0 0 auto; scroll-snap-align: start; white-space: nowrap; }
+
+/* ---------- 2-3 대화 목록 핀 ---------- */
+.list-item .nm-wrap { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.list-item .nm-wrap .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-item .nm-wrap .pin { position: static; width: 12px; height: 12px; flex: none; }
+
+/* ---------- 3-2 씨앗 내역 ---------- */
+.hist-row .delta.minus { color: #666666; }
+.hist-empty { font-size: 13px; color: #666666; padding: 12px 0 4px; text-align: center; }
+
+/* ---------- 4 사주팔자 (J님 규칙: 서브바 아래 top:113px, 영역 absolute + 내부 스크롤) ---------- */
+.sj-tabs { position: absolute; left: 0; right: 0; top: 113px; display: flex; gap: 8px; padding: 12px 16px 0; }
+.sj-tab { flex: 1; height: 40px; border: 1.5px solid #CFCFCF; border-radius: 12px; background: #FFFFFF; font-size: 14px; cursor: pointer; }
+.sj-tab.on { background: #FFC320; border-color: #FFC320; font-weight: 700; }
+.sj-body { position: absolute; left: 0; right: 0; top: 165px; bottom: 0; padding: 12px 16px 24px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; scrollbar-width: none; }
+.sj-body::-webkit-scrollbar { display: none; }
+.sj-card .card-title { display: flex; align-items: baseline; gap: 8px; }
+.sj-sub { font-size: 11px; color: #666666; font-weight: 400; }
+.sj-err { padding: 40px 24px; text-align: center; color: #666666; }
+
+.sj-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px 0 12px; }
+.sj-col { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 12px; background: #F5F5F5; }
+.sj-col--day { outline: 2px solid #FFC320; }
+.sj-col--hide { justify-content: center; }
+.sj-lbl { font-size: 11px; color: #666666; }
+.sj-ss { font-size: 11px; color: #666666; min-height: 14px; }
+.sj-ss--zhi { font-size: 10px; }
+.sj-gan, .sj-zhi { width: 44px; height: 44px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #FFFFFF; line-height: 1; }
+.sj-gan small, .sj-zhi small { font-size: 10px; font-weight: 400; margin-top: 2px; opacity: .9; }
+.sj-unknown { font-size: 12px; color: #CFCFCF; text-align: center; line-height: 1.4; }
+.sj-wx-wood  { background: #3E8E5A; }
+.sj-wx-fire  { background: #E0533D; }
+.sj-wx-earth { background: #C9A227; }
+.sj-wx-metal { background: #9A9A9A; }
+.sj-wx-water { background: #3A6FC4; }
+.sj-daygan { font-size: 13px; color: #666666; line-height: 1.5; }
+.sj-daygan b { color: #000000; }
+
+.sj-wx-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; }
+.sj-wx-k { width: 48px; padding: 3px 0; border-radius: 6px; text-align: center; color: #FFFFFF; font-weight: 700; }
+.sj-wx-bar { flex: 1; height: 8px; background: #F5F5F5; border-radius: 4px; overflow: hidden; }
+.sj-wx-bar i { display: block; height: 100%; background: #FFC320; border-radius: 4px; }
+.sj-wx-n { width: 16px; text-align: right; color: #666666; }
+
+.sj-dy-row { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 4px; scrollbar-width: none; }
+.sj-dy-row::-webkit-scrollbar { display: none; }
+.sj-dy { flex: 0 0 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 12px; background: #F5F5F5; font-size: 11px; color: #666666; }
+.sj-dy.on { background: #FFE685; outline: 2px solid #FFC320; color: #000000; }
+.sj-dy-gz { font-size: 16px; font-weight: 700; color: #000000; }
+.sj-dy-age { font-weight: 700; }
+
+/* ---------- 4 자미두수 명반 ---------- */
+.zw-wrap { position: absolute; left: 0; right: 0; top: 165px; bottom: 0; padding: 10px 8px 16px; overflow-y: auto; scrollbar-width: none; }
+.zw-wrap::-webkit-scrollbar { display: none; }
+.zw-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 132px; gap: 3px; }
+.zw-cell { position: relative; background: #FFFFFF; border: 1px solid #DADADA; border-radius: 6px; padding: 4px 4px 22px; overflow: hidden; font-size: 9px; }
+.zw-cell--ming { border: 2px solid #000000; }
+.zw-cell--cur { background: #FFF6D6; }
+.zw-cell--body .zw-name em { font-style: normal; color: #E0533D; }
+.zw-major, .zw-minor, .zw-adj { display: flex; flex-wrap: wrap; gap: 2px 4px; }
+.zw-star { white-space: nowrap; line-height: 1.3; }
+.zw-star--major { font-size: 11px; font-weight: 800; color: #000000; }
+.zw-star--minor { font-size: 9.5px; color: #333333; }
+.zw-star--adj { font-size: 8.5px; color: #999999; }
+.zw-star u { text-decoration: none; font-size: 8px; color: #666666; margin-left: 1px; }
+.zw-mut { display: inline-block; font-style: normal; font-size: 8px; line-height: 1; padding: 1px 3px; border-radius: 3px; margin-left: 2px; color: #FFFFFF; vertical-align: 1px; }
+.zw-mut--록 { background: #3E8E5A; } .zw-mut--권 { background: #3A6FC4; } .zw-mut--과 { background: #C9A227; } .zw-mut--기 { background: #E0533D; }
+.zw-foot { position: absolute; left: 4px; right: 4px; bottom: 3px; display: flex; justify-content: space-between; align-items: baseline; font-size: 9px; color: #666666; }
+.zw-name { font-weight: 800; color: #000000; font-size: 10px; }
+.zw-center { grid-column: 2 / 4; grid-row: 2 / 4; background: #F5F5F5; border-radius: 8px; padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; gap: 4px; font-size: 10.5px; color: #666666; text-align: center; }
+.zw-c-title { font-size: 14px; font-weight: 800; color: #000000; }
+.zw-c-note { font-size: 9px; color: #999999; margin-top: 6px; }
+.zw-legend { padding: 8px 8px 0; font-size: 11px; color: #666666; text-align: center; }
+.zw-legend .dim { color: #999999; }
