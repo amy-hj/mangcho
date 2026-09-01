@@ -20,18 +20,18 @@ var SAJU = (function () {
     庚:'원석의 기운 · 결단력과 의리',    辛:'보석의 기운 · 예리하고 완벽 지향',
     壬:'바다의 기운 · 자유롭고 스케일이 큼', 癸:'이슬비의 기운 · 조용하고 깊은 감성'
   };
-
+ 
   function ganKo(g){ return GAN_KO[g] || g; }
   function zhiKo(z){ return ZHI_KO[z] || z; }
   function ganzhiKo(gz){ return ganKo(gz[0]) + zhiKo(gz[1]); }
-
+ 
   /* form: { year, month, day, hour, minute, unknownTime, gender } */
   function toSolar(form) {
     var y = +form.year, m = +form.month, d = +form.day;
     var h = form.unknownTime ? 12 : +form.hour, mi = form.unknownTime ? 0 : +form.minute;
     return Solar.fromYmdHms(y, m, d, h || 0, mi || 0, 0);
   }
-
+ 
   function calc(form) {
     var solar = toSolar(form);
     var ec = solar.getLunar().getEightChar();
@@ -65,7 +65,7 @@ var SAJU = (function () {
       solar: solar
     };
   }
-
+ 
   /* 자미두수 (iztro) */
   function timeIndex(form) {
     if (form.unknownTime) return 6; /* 시간 모름 → 午時 기준(정오) */
@@ -77,8 +77,8 @@ var SAJU = (function () {
     var gender = /남/.test(form.gender || '') ? '男' : '女';
     return iztro.astro.bySolar(dateStr, timeIndex(form), gender, true, 'ko-KR');
   }
-
-  /* ---------- 오늘의 운세: 일간 × 오늘 일진 → 십성 ---------- */
+ 
+  /* 오늘의 운세 */
   var FORTUNE_BY_SS = {
     비견: { base: 72, quote: '“오늘은 내 편을 만드는 날이에요.”', body: ['나와 닮은 기운이 들어와 자기 확신이 강해지는 날이에요.', '경쟁보다 협력을 택하면 오히려 내 자리가 단단해져요.', '고집이 세질 수 있으니 한 번은 양보해보세요.'] },
     겁재: { base: 58, quote: '“지갑과 감정, 둘 다 단속하세요.”', body: ['에너지가 넘치지만 밖으로 새기 쉬운 날이에요.', '충동 지출과 즉흥 약속을 조심하면 무난히 지나가요.', '누군가의 부탁엔 하루만 미뤄 답하세요.'] },
@@ -95,7 +95,7 @@ var SAJU = (function () {
   var LUCKY_FOOD  = { 木:'샐러드', 火:'마라탕', 土:'감자전', 金:'흰죽', 水:'물회' };
   var LUCKY_ITEM  = { 木:'화분', 火:'양초', 土:'머그컵', 金:'반지', 水:'텀블러' };
   var LUCKY_NUM   = { 木:'3, 8', 火:'2, 7', 土:'5, 10', 金:'4, 9', 水:'1, 6' };
-
+ 
   function fortune(form, date) {
     date = date || new Date();
     var natal = calc(form);
@@ -118,15 +118,12 @@ var SAJU = (function () {
       items: [['행운의 색', LUCKY_COLOR[wx]], ['행운의 숫자', LUCKY_NUM[wx]], ['추천 아이템', LUCKY_ITEM[wx]], ['추천 음식', LUCKY_FOOD[wx]]]
     };
   }
-
+ 
   return { calc: calc, ziwei: ziwei, fortune: fortune, ganzhiKo: ganzhiKo, ganKo: ganKo, zhiKo: zhiKo };
 })();
-
-/* ============================================================
-   화면: 사주팔자 + 대운
-   ============================================================ */
+ 
+/* 사주팔자 */
 function sajuForm() {
-  /* 온보딩/마이에서 입력 중인 state.form 이 항상 최신 → 우선. 없으면 저장본, 그다음 기본값 */
   if (typeof state !== 'undefined' && state.form && +state.form.year) return state.form;
   if (typeof FEAT !== 'undefined' && FEAT.form && +FEAT.form.year) return FEAT.form;
   return PROFILE_FORM;
@@ -142,12 +139,12 @@ function sajuErrScreen(msg) {
   return '<div class="screen screen--paper">' + statusBar() + subBar('my', '내 명반') +
     '<div class="sj-err"><p>' + esc(msg) + '</p><button class="gray-btn sj-err-btn" data-go="my-edit">회원정보 수정하기</button></div></div>';
 }
-
+ 
 function scSaju(state) {
   var f = sajuForm(), r, err = sajuFormError(f);
   if (err) return sajuErrScreen(err);
   try { r = SAJU.calc(f); } catch (e) { return sajuErrScreen('사주 계산 오류: ' + (e && e.message ? e.message : e)); }
-
+ 
   var cols = r.pillars.map(function (p) {
     if (p.hide) return '<div class="sj-col sj-col--hide"><span class="sj-lbl">' + p.label + '</span><span class="sj-unknown">시간<br>모름</span></div>';
     return '<div class="sj-col' + (p.key === 'day' ? ' sj-col--day' : '') + '">' +
@@ -158,12 +155,12 @@ function scSaju(state) {
       '<span class="sj-ss sj-ss--zhi">' + esc(p.ssZhiKo) + '</span>' +
     '</div>';
   }).join('');
-
+ 
   var wxBars = Object.keys(r.wx).map(function (k) {
     return '<div class="sj-wx-row"><span class="sj-wx-k sj-wx-' + WXCLASS(k) + '">' + k + ' ' + r.wxKo[k] + '</span>' +
       '<span class="sj-wx-bar"><i style="width:' + (r.wx[k] * 12.5) + '%"></i></span><span class="sj-wx-n">' + r.wx[k] + '</span></div>';
   }).join('');
-
+ 
   var dy = r.daYun.map(function (d) {
     return '<div class="sj-dy' + (d.current ? ' on' : '') + '">' +
       '<span class="sj-dy-age">' + d.startAge + '세</span>' +
@@ -172,7 +169,7 @@ function scSaju(state) {
       '<span class="sj-dy-yr">' + d.startYear + '</span>' +
     '</div>';
   }).join('');
-
+ 
   return '' +
     '<div class="screen screen--paper">' + statusBar() + subBar('my', '내 명반') +
       '<div class="sj-tabs"><button class="sj-tab on" data-go="saju">사주팔자</button><button class="sj-tab" data-go="ziwei">자미두수</button></div>' +
@@ -196,49 +193,57 @@ function WXCLASS(ch) {
   var m = { 甲:'wood',乙:'wood',寅:'wood',卯:'wood', 丙:'fire',丁:'fire',巳:'fire',午:'fire', 戊:'earth',己:'earth',丑:'earth',辰:'earth',未:'earth',戌:'earth', 庚:'metal',辛:'metal',申:'metal',酉:'metal', 壬:'water',癸:'water',子:'water',亥:'water', 木:'wood',火:'fire',土:'earth',金:'metal',水:'water' };
   return m[ch] || 'earth';
 }
-
-/* ============================================================
-   화면: 자미두수 명반 + 대한 (12궁 4×4 배치, 가운데 기본정보)
-   ============================================================ */
+ 
+/* 자미두수 명반 */
 var ZW_LAYOUT = [ /* 표준 배치: 지지별 격자 위치 [행, 열] */
   ['사',0,0],['오',0,1],['미',0,2],['신',0,3],
   ['진',1,0],                         ['유',1,3],
   ['묘',2,0],                         ['술',2,3],
   ['인',3,0],['축',3,1],['자',3,2],['해',3,3]
 ];
-
+ 
 function scZiwei(state) {
+  try { return scZiweiInner(state); }
+  catch (e) {
+    if (window.console) console.error('[ziwei] render error', e);
+    return sajuErrScreen('명반 그리기 오류: ' + (e && e.message ? e.message : e) + (e && e.stack ? '\n' + String(e.stack).split('\n')[1] : ''));
+  }
+}
+function scZiweiInner(state) {
+  if (typeof iztro === 'undefined') return sajuErrScreen('자미두수 라이브러리(assets/lib/iztro.min.js)가 로드되지 않았어요. index.html 의 script 경로를 확인해주세요.');
   var f = sajuForm(), a, err = sajuFormError(f);
   if (err) return sajuErrScreen(err);
   try { a = SAJU.ziwei(f); } catch (e) { return sajuErrScreen('명반 계산 오류: ' + (e && e.message ? e.message : e)); }
-
+ 
   var nowYear = new Date().getFullYear();
   var age = nowYear - (+f.year) + 1; /* 세는 나이 */
   var byBranch = {};
   a.palaces.forEach(function (p) { byBranch[p.earthlyBranch] = p; });
-
+  if (!ZW_LAYOUT.some(function (L) { return byBranch[L[0]]; })) return sajuErrScreen('명반 궁 이름을 인식하지 못했어요 (지지: ' + a.palaces.map(function (p) { return p.earthlyBranch; }).join(',') + ')');
+ 
   function starHtml(s, cls) {
     var mut = s.mutagen ? '<i class="zw-mut zw-mut--' + esc(s.mutagen) + '">' + esc(s.mutagen) + '</i>' : '';
     var BR = { '[+3]':'묘', '[+2]':'왕', '[+1]':'득', '[0]':'이', '[-1]':'평', '[-2]':'불', '[-3]':'함' };
     var br  = s.brightness ? '<u>' + esc(BR[s.brightness] || s.brightness) + '</u>' : '';
     return '<span class="zw-star ' + cls + '">' + esc(s.name) + br + mut + '</span>';
   }
-
+ 
   var cells = [];
   for (var r = 0; r < 4; r++) for (var c = 0; c < 4; c++) cells.push(null);
   ZW_LAYOUT.forEach(function (L) {
     var p = byBranch[L[0]];
     if (!p) return;
-    var isCur = p.decadal && age >= p.decadal.range[0] && age <= p.decadal.range[1];
+    var dec = p.decadal && p.decadal.range ? p.decadal.range : null;
+    var isCur = dec && age >= dec[0] && age <= dec[1];
     cells[L[1] * 4 + L[2]] =
       '<div class="zw-cell' + (p.name === '명궁' ? ' zw-cell--ming' : '') + (p.isBodyPalace ? ' zw-cell--body' : '') + (isCur ? ' zw-cell--cur' : '') + '">' +
-        '<div class="zw-major">' + p.majorStars.map(function (s) { return starHtml(s, 'zw-star--major'); }).join('') + '</div>' +
-        '<div class="zw-minor">' + p.minorStars.map(function (s) { return starHtml(s, 'zw-star--minor'); }).join('') + '</div>' +
-        '<div class="zw-adj">' + p.adjectiveStars.map(function (s) { return starHtml(s, 'zw-star--adj'); }).join('') + '</div>' +
+        '<div class="zw-major">' + (p.majorStars || []).map(function (s) { return starHtml(s, 'zw-star--major'); }).join('') + '</div>' +
+        '<div class="zw-minor">' + (p.minorStars || []).map(function (s) { return starHtml(s, 'zw-star--minor'); }).join('') + '</div>' +
+        '<div class="zw-adj">' + (p.adjectiveStars || []).map(function (s) { return starHtml(s, 'zw-star--adj'); }).join('') + '</div>' +
         '<div class="zw-foot">' +
           '<span class="zw-name">' + esc(p.name) + (p.isBodyPalace ? '<em>·신궁</em>' : '') + '</span>' +
           '<span class="zw-gz">' + esc(p.heavenlyStem + p.earthlyBranch) + '</span>' +
-          '<span class="zw-dec">' + (p.decadal ? p.decadal.range[0] + '~' + p.decadal.range[1] : '') + '</span>' +
+          '<span class="zw-dec">' + (dec ? dec[0] + '~' + dec[1] : '') + '</span>' +
         '</div>' +
       '</div>';
   });
@@ -254,7 +259,7 @@ function scZiwei(state) {
     if (i === 6 || i === 9 || i === 10) continue;
     if (cells[i]) grid += cells[i];
   }
-
+ 
   return '' +
     '<div class="screen screen--paper">' + statusBar() + subBar('my', '내 명반') +
       '<div class="sj-tabs"><button class="sj-tab" data-go="saju">사주팔자</button><button class="sj-tab on" data-go="ziwei">자미두수</button></div>' +
@@ -262,7 +267,7 @@ function scZiwei(state) {
       '<p class="zw-legend">사화: <i class="zw-mut zw-mut--록">록</i><i class="zw-mut zw-mut--권">권</i><i class="zw-mut zw-mut--과">과</i><i class="zw-mut zw-mut--기">기</i> · 주성/<small>보조성</small>/<small class="dim">잡성</small></p></div>' +
     '</div>';
 }
-
+ 
 SCREENS['saju']  = scSaju;
 SCREENS['ziwei'] = scZiwei;
 SCREEN_INDEX.push(
