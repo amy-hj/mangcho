@@ -138,7 +138,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    화면 공통 (375 × 812 고정 좌표계)
    ============================================================ */
 .screen { position: absolute; inset: 0; width: 375px; height: 812px; overflow: hidden; }
-.screen--home { background: var(--home-bg); }
+.screen--home {
+   background-color: var(--home-bg);
+   background-image: url('../assets/img/home-bedding-tile.png');
+   background-repeat: repeat-x;
+   background-position: left bottom;
+   background-size: auto 200px; 
+}
 .screen--paper { background: var(--bg-default); }
 .screen--white { background: #FFFFFF; }
 
@@ -194,7 +200,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ============================================================
    주화면 1 — home
    ============================================================ */
-.home-cage { position: absolute; left: -11px; top: 35px; width: 389px; height: 622px; object-fit: cover; pointer-events: none; }
+/*.home-cage { position: absolute; left: -11px; top: 35px; width: 389px; height: 622px; object-fit: cover; pointer-events: none; }*/
+.home-prop { position: absolute; pointer-events: none; }
+.home-house  { left: 18px;  top: 380px; width: 120px; }
+.home-wheel  { left: 250px; top: 400px; width: 100px; }
+.home-bottle { left: 320px; top: 300px; width: 44px;  }
+.home-bowl   { left: 150px; top: 560px; width: 70px;  }
 
 .pill {
   position: absolute; top: 44px; display: flex; align-items: center;
