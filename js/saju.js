@@ -251,7 +251,6 @@ function scZiweiInner(state) {
     '<p class="zw-c-title">' + esc(f.name || '') + ' 명반</p>' +
     '<p>' + esc(a.solarDate) + ' · ' + esc(a.chineseDate) + '</p>' +
     '<p>' + esc(a.fiveElementsClass) + ' · 명주 ' + esc(a.soul) + ' · 신주 ' + esc(a.body) + '</p>' +
-    '<p class="zw-c-note">굵은 테두리 = 명궁 · 노란 배경 = 현재 대한(' + age + '세)</p>' +
   '</div>';
   var grid = '';
   for (var i = 0; i < 16; i++) {
