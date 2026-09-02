@@ -107,7 +107,10 @@ function homeBody() {
   };
 
   return '' +
-      '<img class="home-cage" src="' + ASSET.cage + '" alt="">' +
+      '<img class="home-prop home-house"  src="' + ASSET.homeHouse  + '" alt="">' +
+      '<img class="home-prop home-wheel"  src="' + ASSET.homeWheel  + '" alt="">' +
+      '<img class="home-prop home-bottle" src="' + ASSET.homeBottle + '" alt="">' +
+      '<img class="home-prop home-bowl"   src="' + ASSET.homeBowl   + '" alt="">' +
       statusBar() +
       pill('seed',   ASSET.seedV1,   ASSET.seedV2,   ASSET.seed, HOME.seeds) +
       pill('letter', ASSET.letterV1, ASSET.letterV2, ASSET.seed, HOME.letter) +
