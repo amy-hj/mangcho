@@ -23,6 +23,10 @@ var ASSET = {
   /* 홈 */
   cage:      A + 'img/home-cage.png',
   charHome:  A + 'img/char-melang.svg',
+  homeHouse:   A + 'img/home-house.png',
+  homeWheel:   A + 'img/home-wheel.png',
+  homeBottle:  A + 'img/home-bottle.png',
+  homeBowl:    A + 'img/home-bowl.png',
   speech:    A + 'icon/speech-union.svg',
   seed:      A + 'icon/seed.png',
   seedV1:    A + 'icon/seed-v1.svg',
