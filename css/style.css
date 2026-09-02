@@ -202,10 +202,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    ============================================================ */
 /*.home-cage { position: absolute; left: -11px; top: 35px; width: 389px; height: 622px; object-fit: cover; pointer-events: none; }*/
 .home-prop { position: absolute; pointer-events: none; }
-.home-house  { left: 18px;  top: 380px; width: 120px; }
-.home-wheel  { left: 250px; top: 400px; width: 100px; }
-.home-bottle { left: 320px; top: 300px; width: 44px;  }
-.home-bowl   { left: 150px; top: 560px; width: 70px;  }
+.home-house  { left: 10px;  top: 260px; width: 160px; }
+.home-wheel  { right: 6px; top: 216px; width: 160px; }
+.home-bottle { right: 20px; bottom: 120px; width: 100px; }
+.home-bowl   { left: 50px; bottom: 170px; width: 120px;  }
 
 .pill {
   position: absolute; top: 44px; display: flex; align-items: center;
