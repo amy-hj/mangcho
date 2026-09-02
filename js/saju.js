@@ -264,7 +264,7 @@ function scZiweiInner(state) {
     '<div class="screen screen--paper">' + statusBar() + subBar('my', '내 명반') +
       '<div class="sj-tabs"><button class="sj-tab" data-go="saju">사주팔자</button><button class="sj-tab on" data-go="ziwei">자미두수</button></div>' +
       '<div class="zw-wrap"><div class="zw-grid">' + grid + '</div>' +
-      '<p class="zw-legend">사화: <i class="zw-mut zw-mut--록">록</i><i class="zw-mut zw-mut--권">권</i><i class="zw-mut zw-mut--과">과</i><i class="zw-mut zw-mut--기">기</i> · 주성/<small>보조성</small>/<small class="dim">잡성</small></p></div>' +
+      '<p class="zw-legend">사화: <i class="zw-mut zw-mut--록">록</i><i class="zw-mut zw-mut--권">권</i><i class="zw-mut zw-mut--과">과</i><i class="zw-mut zw-mut--기">기</i> · 주성/<small>보조성</small>/<small>잡성</small></p></div>' +
     '</div>';
 }
  
