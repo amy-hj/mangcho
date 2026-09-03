@@ -30,13 +30,6 @@ if (TEST_RESET) {
   PROFILE_FORM.gender = '남성';
 })();
  
-/* [수정2] 연애 응답: 중립 문구로 교체 (사적 맥락 연상 표현 금지) */
-(function () {
-  for (var i = 0; i < RULES.length; i++) if (RULES[i].topic === '연애') {
-    RULES[i].melang = ['오! 연애 고민이구나! 어떤 상황인지 천천히 말해줘.', '듣고 나서 네 마음이 어떤지도 궁금해.'];
-    RULES[i].kochi  = ['연애 고민. 알겠어, 들어볼게.', '상황부터 정리해줘. 언제부터 그랬어?'];
-  }
-})();
  
 /* [수정3] "내가 잘 하고 있는지 모르겠어" 데모 점프 무력화 → 일반 메시지로 현재 대화에서 이어짐 */
 JUMP_TO_ONGOING = '__demo_disabled__';
