@@ -15,7 +15,7 @@ var FEAT_KEY = 'hamnal_feat_v1';
 if (TEST_RESET) {
   try { localStorage.removeItem(FEAT_KEY); localStorage.removeItem('hamnal_v1'); } catch (e) {}
 }
- 
+
 /* [수정1] 폼 기본값: 이름은 빈칸(placeholder 노출), 생년월일시는 현재 시각, 지역·성별 기본값 */
 (function () {
   var t = new Date();
@@ -29,8 +29,15 @@ if (TEST_RESET) {
   PROFILE_FORM.region = '대한민국 서울';
   PROFILE_FORM.gender = '남성';
 })();
- 
- 
+
+/* [수정2] 연애 응답: 중립 문구로 교체 (사적 맥락 연상 표현 금지) */
+(function () {
+  for (var i = 0; i < RULES.length; i++) if (RULES[i].topic === '연애') {
+    RULES[i].melang = ['오! 연애 고민이구나! 어떤 상황인지 천천히 말해줘.', '듣고 나서 네 마음이 어떤지도 궁금해.'];
+    RULES[i].kochi  = ['연애 고민. 알겠어, 들어볼게.', '상황부터 정리해줘. 언제부터 그랬어?'];
+  }
+})();
+
 /* [수정3] "내가 잘 하고 있는지 모르겠어" 데모 점프 무력화 → 일반 메시지로 현재 대화에서 이어짐 */
 JUMP_TO_ONGOING = '__demo_disabled__';
 var FEAT = (function () {
@@ -201,10 +208,19 @@ scAttendDone = function () {
     '</div></div>';
 };
  
-/* 오늘의 운세 */
+/* ============================================================
+   1-3 · 오늘의 운세 (생년월일시 → 일간 × 오늘 일진, 결정론)
+   ============================================================ */
+/* ⚠ [수정6] 운세 모달에 "오늘의 일진 ○○ · 나에겐 ○○의 날" 같은 일진/십성 표기 줄을 절대 넣지 않는다 (사용자 확정 지시) */
 scFortune = function () {
   var f = sajuForm(), F;
-  try { F = SAJU.fortune(f, new Date()); } catch (e) { F = FORTUNE; }
+  try {
+    F = SAJU.fortune(f, new Date());
+    if (window.console) console.log('[운세] 개인화 작동 — 생년월일 ' + f.year + '.' + f.month + '.' + f.day + ' 기준, ' + F.score);
+  } catch (e) {
+    F = FORTUNE;
+    if (window.console) console.error('[운세] 계산 실패 → 기본 문구(80점)로 대체. 원인:', e);
+  }
   var items = F.items.map(function (it) {
     return '<div class="f-item"><span class="f-label">' + esc(it[0]) + '</span><span class="f-value">' + esc(it[1]) + '</span></div>';
   }).join('');
@@ -225,7 +241,10 @@ scFortune = function () {
     '</div>';
 };
  
-/* 코치 선택 시 말풍선 아바타/이름 · 핀 위치 */
+/* ============================================================
+   2-1 · 코치 선택 시 말풍선 아바타/이름   2-3 · 핀 위치
+   ============================================================ */
+/* [수정4] 대화방마다 그 방을 시작할 때 고른 햄찌의 사진·이름으로 표시 */
 function roomCharId() {
   if (typeof state === 'undefined') return 'melang';
   if (state.current === 'chat-start' || state.current === 'chat-new') return state.charId || 'melang';
@@ -238,11 +257,12 @@ bubble = function (m) {
   var cid = roomCharId();
   var kochi = cid === 'kochi';
   var av = kochi ? ASSET.avatar2 : ASSET.avatarChat;
+  /* 이름: 이 방의 햄찌가 온보딩에서 이름 지어준 그 애면 지어준 이름, 아니면 기본 이름 */
   var who = (cid === FEAT.onbCharId && FEAT.hamName) ? FEAT.hamName : (kochi ? '코치' : '멜랑');
   return '<div class="msg-row msg-row--' + (kochi ? 'kochi' : 'melang') + '"><div class="avatar"><img src="' + av + '" alt=""></div>' +
     '<div class="msg-col"><span class="who">' + esc(who) + '</span>' + box + '</div></div>';
 };
- 
+
 /* [수정4] 방 생성 시 그 방의 햄찌 기록 · 방 열 때 복원(없으면 아바타로 추론) */
 var _pushOrig = pushMessage;
 pushMessage = function (text, bucket) {
@@ -268,8 +288,11 @@ chatListMarkup = function (rooms) {
   return '<div class="list-wrap"><div class="list-title">대화 목록</div><div class="list-items">' + items + '</div></div>';
 };
  
-/* 온보딩에서 고른 햄찌 → 홈 캐릭터 이미지 + 이름 */
+/* ============================================================
+   온보딩에서 고른 햄찌 → 홈 캐릭터 이미지 + 이름
+   ============================================================ */
 function hamInfo() {
+  /* 홈·마이 표시는 항상 "온보딩에서 고른 햄찌" 기준 (대화방 선택과 무관) */
   var cid = (typeof FEAT !== 'undefined' && FEAT.onbCharId) ? FEAT.onbCharId
           : ((typeof state !== 'undefined' && state.charId) || 'melang');
   var kochi = cid === 'kochi';
@@ -286,12 +309,16 @@ homeBody = function () {
   return html;
 };
  
-/*  마이 (회원정보 반영 + 명반 진입) · 씨앗 내역 */
+/* ============================================================
+   3-1 · 마이 (회원정보 반영 + 명반 진입)   3-2 · 씨앗 내역
+   ============================================================ */
 var _scMyOrig = scMy;
 scMy = function (state) {
   var html = _scMyOrig(state);
+  /* J님의 기존 햄찌 행(.my-row): 아바타를 고른 햄찌로 교체 (이름·설명은 syncProfile 에서 ME.pet 에 반영) */
   var h = hamInfo();
   html = html.replace('<img class="avatar34" src="' + ASSET.avatarTori + '"', '<img class="avatar34" src="' + h.avatar + '"');
+  /* "내 명반" 진입 카드 */
   var card = '<button class="my-card my-menu" data-go="saju"><span class="lbl">내 명반 · 사주팔자 / 자미두수</span><img class="chev" src="' + ASSET.chevron + '" alt=""></button>';
   return html.replace('<p class="my-section">설정</p>', card + '<p class="my-section">설정</p>');
 };
@@ -332,7 +359,7 @@ scChatMenu = function (state) {
   if (room && room.pinned) html = html.replace('<span>채팅방 고정</span>', '<span>고정 해제</span>');
   return html;
 };
- 
+
 /* SCREENS 맵은 함수 참조를 고정으로 들고 있으므로 덮어쓴 화면 함수를 재등록 */
 SCREENS['fortune']     = scFortune;
 SCREENS['attend-done'] = scAttendDone;
@@ -340,10 +367,12 @@ SCREENS['my']          = scMy;
 SCREENS['my-history']  = scMyHistory;
 SCREENS['chat-menu']   = scChatMenu;
  
-/* 이벤트 (app.js 리스너 뒤에 실행됨) */
+/* ============================================================
+   이벤트 (app.js 리스너 뒤에 실행됨)
+   ============================================================ */
 document.getElementById('viewport').addEventListener('click', function (e) {
   var el;
- 
+
   /* [수정5] 대화방 고정 토글 */
   el = e.target.closest('[data-pin-toggle]');
   if (el) {
@@ -419,11 +448,13 @@ document.getElementById('btn-reset').addEventListener('click', function () {
   });
 })();
 if (TEST_RESET) {
-  start();
+  start();                                   /* 지워진 저장소 기준으로 상태 재생성 */
   var first = SCREEN_INDEX.filter(function (s) { return s.id.indexOf('onb') === 0; })[0];
   syncProfile();
-  jump(first ? first.id : 'home');
+  jump(first ? first.id : 'home');           /* 항상 온보딩 1부터 */
 } else {
   syncProfile();
   render(state.current || 'home', { replace: true });
 }
+
+if (window.console) console.log('[features] v8 로드됨');
