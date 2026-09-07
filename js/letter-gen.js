@@ -1,11 +1,11 @@
 /* ============================================================
-   Hamnal — 편지 생성기 (letter-gen.js)
+   Hamnal — 편지 생성기 (letter-gen.js)  [v3]
    온보딩/마이의 생년월일시 → 사주·자미두수 → 편지 1부 5장을 채웁니다.
    로드 순서: … saju.js → features.js → letter-gen.js (맨 마지막)
-   J님 파일은 수정하지 않고 CHAPTER_BODY / LETTER_* 데이터만 갈아끼웁니다.
+   다른 js파일은 수정하지 않고 CHAPTER_BODY / LETTER_* 데이터만 갈아끼웁니다.
    2부(대화 기록 8장)는 건드리지 않습니다.
 
-   문구 수정을 원할 시: 아래 LG_* 테이블의 한글만 고치면 됩니다.
+   문구 수정을 원한다면: 아래 LG_* 테이블의 한글만 고치면 됩니다.
    ============================================================ */
 
 /* ---------- 십성별 이달 테마 (총운) ---------- */
@@ -212,8 +212,10 @@ var LETTERGEN = (function () {
     LETTER.ready.sub = '이번 달 ' + uname + '한테 꼭 하고 싶은 말이 있어!';
     /* [요청2] To/From: 내 이름 · 햄찌 이름으로 */
     LETTER_PREVIEW.to = 'To. ' + uname + ' 잘 지냈어?';
+    var cidF = (typeof FEAT !== 'undefined' && FEAT.onbCharId) ? FEAT.onbCharId
+             : ((typeof state !== 'undefined' && state.charId) || 'melang');
     var hname = (typeof FEAT !== 'undefined' && FEAT.hamName) ? FEAT.hamName
-              : ((typeof FEAT !== 'undefined' && FEAT.onbCharId === 'kochi') ? '코치' : '멜랑');
+              : (cidF === 'kochi' ? '코치' : '멜랑');
     LETTER_PREVIEW.from = 'From. ' + hname;
   }
 
@@ -232,10 +234,16 @@ render = function (id, opts) {
   _renderLG(id, opts);
   /* [요청1·2] 편지 화면의 햄찌 이미지: 온보딩에서 고른 햄찌로 (해당 요소만 교체) */
   if (String(id).indexOf('letter') === 0) {
-    var kochi = (typeof FEAT !== 'undefined' && FEAT.onbCharId === 'kochi');
-    var heroImg = viewport.querySelector('.letter-char');                       /* 편지5·6 상단 캐릭터 */
+    var cidL = (typeof FEAT !== 'undefined' && FEAT.onbCharId) ? FEAT.onbCharId
+             : ((typeof state !== 'undefined' && state.charId) || 'melang');
+    var kochi = cidL === 'kochi';
+    var heroImg = viewport.querySelector('.letter-hero .letter-char');          /* 편지5·6 상단 캐릭터 */
     if (heroImg && kochi) heroImg.src = ASSET.cardKochi;
+    var footImg = viewport.querySelector('.letter-foot .foot-char');            /* 편지6 하단 캐릭터 */
+    if (footImg && kochi) footImg.src = ASSET.cardKochi;
     var readyAv = viewport.querySelector('.letter-card--ready .avatar34');      /* 편지4 개봉 카드 아바타 */
     if (readyAv) readyAv.src = kochi ? ASSET.avatar2 : ASSET.avatar1;
   }
 };
+
+if (window.console) console.log('[letter-gen] v3 로드됨');
