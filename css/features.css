@@ -147,3 +147,7 @@
   100% { transform: scale(1, 1); }
 }
 .home-char.boing { animation: boing .5s ease-out; transform-origin: 50% 100%; }
+
+/* 홈 말풍선: 클릭 가능 표시 */
+.home-speech.home-speech--fit { cursor: pointer; }
+.home-speech.home-speech--fit:active { transform: translateX(-50%) scale(.96); }
