@@ -526,7 +526,13 @@ function startTopicChat(q) {
 
 
 
-
+  /* 홈 말풍선 클릭: 그 질문으로 바로 대화 시작 */
+  el = e.target.closest('.home-speech--fit');
+  if (el) {
+    var qEl = el.querySelector('p');
+    if (qEl && qEl.textContent) startTopicChat(qEl.textContent);
+    return;
+  }
 
    
   /* 홈 햄찌 클릭: 질문 교체 + 띠용 애니메이션 */
