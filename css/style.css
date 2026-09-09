@@ -222,7 +222,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .pill--seed   { left: 22.5px; }
 .pill--letter { left: 255px; }
 
-.side-actions { position: absolute; left: 20px; top: 88px; width: 40px; display: flex; flex-direction: column; gap: 4px; }
+.side-actions { position: absolute; left: 20px; top: 88px; width: 40px; display: flex; flex-direction: column; gap: 10px; }
 .side-actions .act { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 100%; }
 .side-actions .act .ico { position: relative; width: 32px; height: 32px; }
 .side-actions .act .ico img { position: absolute; }
