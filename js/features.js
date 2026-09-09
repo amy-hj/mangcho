@@ -30,11 +30,11 @@ if (TEST_RESET) {
   PROFILE_FORM.gender = '남성';
 })();
 
-/* [수정2] 연애 응답: 중립 문구로 교체 (사적 맥락 연상 표현 금지) */
+/* [수정2] 연애 응답 */
 (function () {
   for (var i = 0; i < RULES.length; i++) if (RULES[i].topic === '연애') {
     RULES[i].melang = ['오! 연애 고민이구나! 어떤 상황인지 천천히 말해줘.', '듣고 나서 네 마음이 어떤지도 궁금해.'];
-    RULES[i].kochi  = ['연애 고민. 알겠어, 들어볼게.', '상황부터 정리해줘. 언제부터 그랬어?'];
+    RULES[i].kochi  = ['연애, 제일 신경 쓰이는 분야지. 말해봐.', '상황부터 정리해줘. 언제부터 그랬어?'];
   }
 })();
 
@@ -50,6 +50,7 @@ var FEAT = (function () {
     letterRead: {},        /* { 'YYYY-MM': true } */
     form: null,            /* 회원정보 (PROFILE_FORM 형태) */
     hamName: '',           /* 온보딩에서 지어준 햄찌 이름 */
+    onbTopics: [],         /* 온보딩 8에서 고른 대화 주제 */
     cal: null              /* { y, m } 달력 표시 월 */
   };
 })();
@@ -105,7 +106,7 @@ function syncProfile() {
 }
  
 /* ---------- render 훅 ---------- */
-var FORM_SCREENS = { 'onb-profile': 1, 'my-edit': 1, 'onb-pick': 1 };
+var FORM_SCREENS = { 'onb-profile': 1, 'my-edit': 1, 'onb-pick': 1, 'onb-topic': 1 };
 function captureForm() {
   if (typeof state === 'undefined') return;
   if (state.current === 'onb-profile' || state.current === 'my-edit') { FEAT.form = Object.assign({}, state.form); }
@@ -114,6 +115,7 @@ function captureForm() {
     FEAT.hamName = state.onbName || '';
     FEAT.onbCharId = state.charId || 'melang';   /* [수정4] 온보딩에서 고른 햄찌 기록 */
   }
+  if (state.current === 'onb-topic') { FEAT.onbTopics = (state.onbTopics || []).slice(); }
   featSave();
 }
 var _renderOrig = render;
@@ -291,6 +293,79 @@ chatListMarkup = function (rooms) {
 /* ============================================================
    온보딩에서 고른 햄찌 → 홈 캐릭터 이미지 + 이름
    ============================================================ */
+/* ============================================================
+   홈 말풍선: 온보딩에서 고른 대화 주제의 예시 질문 (햄찌 클릭마다 랜덤)
+   문구 수정: 아래 TOPIC_QUESTIONS 의 한글만 고치면 됩니다.
+   ============================================================ */
+var TOPIC_QUESTIONS = {
+  '인간관계': [
+    '요즘 제일 자주 보는 사람은 누구야?',
+    '오늘은 누구 때문에 기 빨렸어?',
+    '고맙다고 말 못 한 사람 있지 않아?',
+    '손절할까 말까 고민되는 사람 있어?'
+  ],
+  '일·직장': [
+    '오늘 회사에서 제일 힘 빠진 순간은 언제였어?',
+    '지금 하는 일, 3년 뒤에도 하고 있을 것 같아?',
+    '월요일 아침의 너에게 한마디 한다면?',
+    '요즘 일하면서 제일 뿌듯했던 건 뭐야?'
+  ],
+  '가족': [
+    '요즘 가족한테 연락 자주 해?',
+    '가족 중에 제일 대화하기 어려운 사람 있어?',
+    '부모님이랑 최근에 웃었던 기억 있어?',
+    '집에 가면 마음이 편해, 무거워?'
+  ],
+  '재테크': [
+    '요즘 돈 모으는 목표 있어? 얼마나 모였어?',
+    '이번 달에 제일 아까웠던 지출은 뭐야?',
+    '월급 들어오면 제일 먼저 뭐부터 해?',
+    '투자하면서 밤에 잠 못 잔 적 있어?'
+  ],
+  '연애·결혼': [
+    '요즘 마음 가는 사람 있어? (귀 쫑긋)',
+    '연애에서 제일 포기 못 하는 조건 하나만!',
+    '요즘 그 사람이랑 어때? 얘기해줘.',
+    '결혼은 하고 싶은 편이야, 아니야?'
+  ],
+  '건강': [
+    '어젯밤 몇 시에 잤어? 솔직하게!',
+    '요즘 몸에서 제일 신경 쓰이는 데 있어?',
+    '오늘 물 몇 잔 마셨어?',
+    '너는 무슨 운동을 해? 나는 쳇바퀴 타기!'
+  ],
+  '불안·스트레스': [
+    '요즘 제일 걱정되는 거 하나만 말해줄래?',
+    '스트레스 받으면 제일 먼저 뭐 해?',
+    '오늘 마음은 10점 만점 에 몇 점이야?',
+    '요즘 생각이 많아서 잠 못 든 날이 있었어?'
+  ],
+  '다른 문제': [
+    '요즘 머릿속을 제일 많이 차지하는 게 뭐야?',
+    '누구한테도 말 안 한 얘기가 있다면 나한테 슬쩍 털어놔도 돼.',
+    '오늘 하루를 한 단어로 하면 뭘 거 같아?',
+    '지금 제일 하고 싶은 게 뭐야?'
+    '언제든지 볼주머니를 열어둘게.'
+  ]
+};
+var GENERIC_QUESTIONS = [
+  '오늘 밤엔 무슨 얘기 해줄래? 츄',
+  '네 얘기 들으려고 볼주머니 비워놨어!',
+  '오늘 하루 어땠어? 좋은 거든 별로든 다 괜찮아.'
+];
+var _lastQ = '';
+function hamQuestion() {
+  var topics = (typeof FEAT !== 'undefined' && FEAT.onbTopics && FEAT.onbTopics.length) ? FEAT.onbTopics
+             : ((typeof state !== 'undefined' && state.onbTopics && state.onbTopics.length) ? state.onbTopics : []);
+  var pool = [];
+  topics.forEach(function (t) { if (TOPIC_QUESTIONS[t]) pool = pool.concat(TOPIC_QUESTIONS[t]); });
+  if (!pool.length) pool = GENERIC_QUESTIONS;
+  if (pool.length > 1) pool = pool.filter(function (q) { return q !== _lastQ; });
+  var q = pool[Math.floor(Math.random() * pool.length)];
+  _lastQ = q;
+  return q;
+}
+
 function hamInfo() {
   /* 홈·마이 표시는 항상 "온보딩에서 고른 햄찌" 기준 (대화방 선택과 무관) */
   var cid = (typeof FEAT !== 'undefined' && FEAT.onbCharId) ? FEAT.onbCharId
@@ -304,8 +379,12 @@ function hamInfo() {
 var _homeBodyOrig = homeBody;
 homeBody = function () {
   var h = hamInfo();
+  HOME.speech = hamQuestion();   /* 말풍선 = 선택 주제 기반 질문 */
   var html = _homeBodyOrig();
   html = html.replace('<img class="home-char" src="' + ASSET.charHome + '"', '<img class="home-char' + (h.kochi ? ' home-char--kochi' : '') + '" src="' + h.homeImg + '"');
+  /* 말풍선: 고정 이미지 제거 → 텍스트 길이에 맞춰 늘어나는 CSS 말풍선 */
+  html = html.replace('<div class="home-speech">', '<div class="home-speech home-speech--fit">');
+  html = html.replace('<img src="' + ASSET.speech + '" alt="">', '');
   return html;
 };
  
@@ -372,6 +451,17 @@ SCREENS['chat-menu']   = scChatMenu;
    ============================================================ */
 document.getElementById('viewport').addEventListener('click', function (e) {
   var el;
+
+  /* 홈 햄찌 클릭: 질문 교체 + 띠용 애니메이션 */
+  el = e.target.closest('.home-char');
+  if (el) {
+    var sp = document.querySelector('#viewport .home-speech--fit p');
+    if (sp) sp.textContent = hamQuestion();
+    el.classList.remove('boing');
+    void el.offsetWidth;               /* 애니메이션 재시작 트릭 */
+    el.classList.add('boing');
+    return;
+  }
 
   /* [수정5] 대화방 고정 토글 */
   el = e.target.closest('[data-pin-toggle]');
