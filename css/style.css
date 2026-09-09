@@ -239,7 +239,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .side-actions .act--attend .v2    { left: 9.26px; top: 5.89px;  width: 19.397px; height: 8.23px; }
 
 .home-speech {
-  position: absolute; left: calc(50% + .5px); top: 286.19px; transform: translateX(-50%);
+  position: absolute; left: calc(50% + .5px); bottom: 468px; transform: translateX(-50%);
   width: 184px; height: 51.092px; display: flex; align-items: center; justify-content: center;
   padding: 16px 12px 12px;
 }
