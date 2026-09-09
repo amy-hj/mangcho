@@ -392,7 +392,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ============================================================
    주화면 8 — 대화방 메뉴
    ============================================================ */
-.dim { position: absolute; left: 0; top: 0; width: 375px; height: 812px; background: #000; }
+.dim { position: absolute; left: 0; top: 0; width: 375px; height: 812px; }
 .dim--menu  { opacity: .5; }
 .dim--modal { opacity: .5; }
 /* 출첵3 · 운세는 Figma Rectangle 172 = 검정 63% */
