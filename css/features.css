@@ -110,7 +110,7 @@
 .zw-c-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .zw-c-note { font-size: 9px; color: var(--text-disabled); margin-top: 6px; }
 .zw-legend { padding: 8px 4px 0; font-family: var(--font-body); font-size: 11px; color: var(--text-secondary); text-align: center; }
-.zw-legend .dim { color: var(--text-disabled); }
+.zw-legend .dimtxt { color: var(--text-disabled); }
 
 /* ---------- 온보딩 햄찌 → 홈/마이 ---------- */
 .home-char--kochi { object-fit: contain; }
@@ -151,3 +151,7 @@
 /* ---------- 연속 말풍선 묶음 ---------- */
 .msg-row .avatar--ghost { visibility: hidden; }
 .msg-row--cont { margin-top: -8px; }
+
+
+
+.dim { background: #000000; }
